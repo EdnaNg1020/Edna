@@ -61,11 +61,12 @@
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
         
-        .score-container, .high-score-container {
+        .score-container, .high-score-container, .difficulty-container {
             text-align: center;
+            flex: 1;
         }
         
-        .score-label, .high-score-label {
+        .score-label, .high-score-label, .difficulty-label {
             font-size: 1rem;
             color: #aaa;
             margin-bottom: 5px;
@@ -76,6 +77,57 @@
             font-weight: bold;
             color: #00ff88;
             text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+        }
+        
+        .difficulty-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ffaa00;
+            text-shadow: 0 0 8px rgba(255, 170, 0, 0.5);
+        }
+        
+        .difficulty-selector {
+            margin-top: 10px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .difficulty-btn {
+            padding: 6px 12px;
+            border-radius: 5px;
+            border: 1px solid #555;
+            background-color: #222;
+            color: #ccc;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        
+        .difficulty-btn:hover {
+            background-color: #333;
+        }
+        
+        .difficulty-btn.active {
+            background-color: #ffaa00;
+            color: #000;
+            font-weight: bold;
+            border-color: #ffaa00;
+        }
+        
+        .difficulty-btn.easy.active {
+            background-color: #00aa00;
+            border-color: #00aa00;
+        }
+        
+        .difficulty-btn.medium.active {
+            background-color: #ffaa00;
+            border-color: #ffaa00;
+        }
+        
+        .difficulty-btn.hard.active {
+            background-color: #ff5555;
+            border-color: #ff5555;
         }
         
         .game-wrapper {
@@ -188,7 +240,7 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: rgba(0, 0, 0, 0.85);
+            background-color: rgba(0, 0, 0, 0.9);
             padding: 30px 40px;
             border-radius: 15px;
             text-align: center;
@@ -197,13 +249,47 @@
             display: none;
             z-index: 10;
             width: 80%;
-            max-width: 400px;
+            max-width: 450px;
         }
         
         .game-over h2 {
             color: #ff5555;
             font-size: 2.2rem;
             margin-bottom: 15px;
+        }
+        
+        .comment {
+            font-size: 1.3rem;
+            color: #ffaa00;
+            margin: 15px 0;
+            min-height: 40px;
+            font-weight: bold;
+        }
+        
+        .score-breakdown {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .score-breakdown p {
+            margin: 8px 0;
+            font-size: 1.1rem;
+        }
+        
+        .new-record {
+            color: #ffdd00;
+            font-weight: bold;
+            font-size: 1.2rem;
+            animation: pulse 1.5s infinite;
+            margin: 10px 0;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
         }
         
         .final-score {
@@ -257,6 +343,12 @@
             
             .game-info {
                 padding: 12px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .score-container, .high-score-container, .difficulty-container {
+                width: 100%;
             }
             
             .mobile-controls {
@@ -269,15 +361,14 @@
         }
         
         @media (max-width: 480px) {
-            .game-info {
-                flex-direction: column;
-                gap: 15px;
-            }
-            
             .mobile-btn {
                 width: 70px;
                 height: 70px;
                 font-size: 1.8rem;
+            }
+            
+            .difficulty-selector {
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -298,6 +389,15 @@
                 <div class="high-score-label">最高分數</div>
                 <div id="high-score-value" class="high-score-value">0</div>
             </div>
+            <div class="difficulty-container">
+                <div class="difficulty-label">遊戲難度</div>
+                <div id="difficulty-value" class="difficulty-value">中級</div>
+                <div class="difficulty-selector">
+                    <button class="difficulty-btn easy" data-difficulty="easy">簡單</button>
+                    <button class="difficulty-btn medium active" data-difficulty="medium">中級</button>
+                    <button class="difficulty-btn hard" data-difficulty="hard">困難</button>
+                </div>
+            </div>
         </div>
         
         <div class="game-wrapper">
@@ -306,7 +406,13 @@
             <div id="game-over" class="game-over">
                 <h2>遊戲結束</h2>
                 <p>你的蛇撞到了障礙物！</p>
-                <div class="final-score">分數: <span id="final-score">0</span></div>
+                <div class="comment" id="game-comment">加油，再試一次！</div>
+                <div class="score-breakdown">
+                    <p>本次分數: <span id="final-score">0</span></p>
+                    <p>最高分數: <span id="final-high-score">0</span></p>
+                    <p>難度: <span id="final-difficulty">中級</span></p>
+                </div>
+                <div class="new-record" id="new-record" style="display:none">🎉 恭喜打破紀錄！ 🎉</div>
                 <button id="restart-button">重新開始遊戲</button>
             </div>
         </div>
@@ -315,6 +421,7 @@
             <div class="instructions">
                 <p>使用 <strong>方向鍵</strong> 或 <strong>WASD</strong> 控制蛇的移動方向</p>
                 <p>每吃一個 <span style="color:#ff5555">紅色蘋果</span> 得10分，蛇身會變長</p>
+                <p><span style="color:#ffaa00">難度越高，蛇的速度越快！</span></p>
                 
                 <div class="control-keys">
                     <div class="key key-up">↑</div>
@@ -344,11 +451,17 @@
         const ctx = canvas.getContext('2d');
         const scoreValue = document.getElementById('score-value');
         const highScoreValue = document.getElementById('high-score-value');
+        const difficultyValue = document.getElementById('difficulty-value');
         const finalScore = document.getElementById('final-score');
+        const finalHighScore = document.getElementById('final-high-score');
+        const finalDifficulty = document.getElementById('final-difficulty');
+        const gameComment = document.getElementById('game-comment');
+        const newRecord = document.getElementById('new-record');
         const gameOverScreen = document.getElementById('game-over');
         const startButton = document.getElementById('start-button');
         const pauseButton = document.getElementById('pause-button');
         const restartButton = document.getElementById('restart-button');
+        const difficultyButtons = document.querySelectorAll('.difficulty-btn');
         
         // 移動控制按鈕
         const upBtn = document.getElementById('up-btn');
@@ -366,11 +479,43 @@
         let direction = 'right';
         let nextDirection = 'right';
         let score = 0;
-        let highScore = localStorage.getItem('snakeHighScore') || 0;
         let gameSpeed = 120; // 毫秒
         let gameRunning = false;
         let gamePaused = false;
         let gameLoop;
+        
+        // 難度設定
+        let currentDifficulty = 'medium';
+        const difficulties = {
+            'easy': { speed: 150, color: '#00aa00', name: '簡單' },
+            'medium': { speed: 120, color: '#ffaa00', name: '中級' },
+            'hard': { speed: 90, color: '#ff5555', name: '困難' }
+        };
+        
+        // 評語系統
+        const comments = {
+            'easy': [
+                { min: 0, max: 50, text: '新手入門，繼續努力！' },
+                { min: 51, max: 100, text: '不錯的開始，加油！' },
+                { min: 101, max: 200, text: '表現不錯，越來越熟練了！' },
+                { min: 201, max: 300, text: '高手級表現！' },
+                { min: 301, max: 9999, text: '專家等級！太厲害了！' }
+            ],
+            'medium': [
+                { min: 0, max: 30, text: '剛開始，需要多練習！' },
+                { min: 31, max: 80, text: '漸入佳境，不錯！' },
+                { min: 81, max: 150, text: '表現出色，繼續保持！' },
+                { min: 151, max: 250, text: '高手風範！' },
+                { min: 251, max: 9999, text: '大師級操作！令人驚嘆！' }
+            ],
+            'hard': [
+                { min: 0, max: 20, text: '困難模式不容易，加油！' },
+                { min: 21, max: 60, text: '不錯的嘗試，繼續挑戰！' },
+                { min: 61, max: 120, text: '表現優異，反應很快！' },
+                { min: 121, max: 200, text: '頂尖玩家水準！' },
+                { min: 201, max: 9999, text: '傳奇級表現！你太強了！' }
+            ]
+        };
         
         // 初始化遊戲
         function initGame() {
@@ -392,11 +537,15 @@
             score = 0;
             updateScore();
             
-            // 更新最高分顯示
-            highScoreValue.textContent = highScore;
+            // 更新難度顯示
+            updateDifficultyDisplay();
             
             // 隱藏遊戲結束畫面
             gameOverScreen.style.display = 'none';
+            newRecord.style.display = 'none';
+            
+            // 設置遊戲速度
+            gameSpeed = difficulties[currentDifficulty].speed;
             
             // 開始遊戲循環
             if (gameLoop) clearInterval(gameLoop);
@@ -476,9 +625,13 @@
                 // 生成新食物
                 generateFood();
                 
-                // 每得50分增加速度
+                // 根據難度增加速度（困難模式下速度增加更快）
                 if (score % 50 === 0 && gameSpeed > 50) {
-                    gameSpeed -= 10;
+                    let speedReduction = 10;
+                    if (currentDifficulty === 'hard') speedReduction = 15;
+                    if (currentDifficulty === 'easy') speedReduction = 7;
+                    
+                    gameSpeed -= speedReduction;
                     clearInterval(gameLoop);
                     gameLoop = setInterval(updateGame, gameSpeed);
                 }
@@ -610,12 +763,47 @@
         function updateScore() {
             scoreValue.textContent = score;
             
-            // 更新最高分
+            // 更新最高分（分難度記錄）
+            updateHighScore();
+        }
+        
+        // 更新最高分
+        function updateHighScore() {
+            // 獲取當前難度的最高分
+            const highScoreKey = `snakeHighScore_${currentDifficulty}`;
+            let highScore = localStorage.getItem(highScoreKey) || 0;
+            
+            // 更新顯示
+            highScoreValue.textContent = highScore;
+            
+            // 如果當前分數超過最高分，更新儲存
             if (score > highScore) {
-                highScore = score;
-                highScoreValue.textContent = highScore;
-                localStorage.setItem('snakeHighScore', highScore);
+                localStorage.setItem(highScoreKey, score);
+                highScoreValue.textContent = score;
             }
+        }
+        
+        // 獲取最高分
+        function getHighScore() {
+            const highScoreKey = `snakeHighScore_${currentDifficulty}`;
+            return localStorage.getItem(highScoreKey) || 0;
+        }
+        
+        // 更新難度顯示
+        function updateDifficultyDisplay() {
+            difficultyValue.textContent = difficulties[currentDifficulty].name;
+            difficultyValue.style.color = difficulties[currentDifficulty].color;
+            
+            // 更新按鈕狀態
+            difficultyButtons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.difficulty === currentDifficulty) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // 更新最高分顯示
+            updateHighScore();
         }
         
         // 遊戲結束
@@ -623,9 +811,46 @@
             gameRunning = false;
             clearInterval(gameLoop);
             
+            // 獲取最高分
+            const highScore = getHighScore();
+            const isNewRecord = score > highScore;
+            
+            // 更新最高分（如果需要）
+            if (isNewRecord) {
+                const highScoreKey = `snakeHighScore_${currentDifficulty}`;
+                localStorage.setItem(highScoreKey, score);
+            }
+            
+            // 獲取評語
+            const comment = getComment(score);
+            
             // 顯示遊戲結束畫面
             finalScore.textContent = score;
+            finalHighScore.textContent = isNewRecord ? score : highScore;
+            finalDifficulty.textContent = difficulties[currentDifficulty].name;
+            gameComment.textContent = comment;
+            
+            // 顯示新紀錄訊息
+            if (isNewRecord) {
+                newRecord.style.display = 'block';
+            } else {
+                newRecord.style.display = 'none';
+            }
+            
             gameOverScreen.style.display = 'block';
+        }
+        
+        // 獲取評語
+        function getComment(score) {
+            const difficultyComments = comments[currentDifficulty];
+            
+            for (let comment of difficultyComments) {
+                if (score >= comment.min && score <= comment.max) {
+                    return comment.text;
+                }
+            }
+            
+            return '表現不錯！';
         }
         
         // 處理鍵盤輸入
@@ -674,6 +899,21 @@
         pauseButton.addEventListener('click', togglePause);
         
         restartButton.addEventListener('click', initGame);
+        
+        // 難度按鈕事件
+        difficultyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                currentDifficulty = button.dataset.difficulty;
+                updateDifficultyDisplay();
+                
+                // 如果遊戲正在進行，更新速度
+                if (gameRunning) {
+                    gameSpeed = difficulties[currentDifficulty].speed;
+                    clearInterval(gameLoop);
+                    gameLoop = setInterval(updateGame, gameSpeed);
+                }
+            });
+        });
         
         // 移動控制按鈕事件
         upBtn.addEventListener('click', () => {
