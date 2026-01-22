@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>2048 遊戲 - HTML5 實現</title>
+    <title>2048 遊戲 - 完整修復版</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -139,41 +139,71 @@
         .grid-cell {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            position: relative;
+            overflow: hidden;
         }
         
+        /* === 關鍵修正：數字方塊有背景色 === */
         .tile {
             position: absolute;
-            width: calc((100% - 75px) / 4);
-            height: calc((100% - 75px) / 4);
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.8rem;
             font-weight: 700;
             border-radius: 8px;
-            transition: all 0.15s ease;
             z-index: 10;
             user-select: none;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            transition: transform 0.2s ease, opacity 0.2s ease;
+            /* 預設樣式（不該出現，但安全起見） */
+            background-color: #3a3a45;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
         }
-        
-        .tile-2 { background-color: #2a9d8f; color: #fff; }
-        .tile-4 { background-color: #e9c46a; color: #333; }
-        .tile-8 { background-color: #f4a261; color: #fff; }
-        .tile-16 { background-color: #e76f51; color: #fff; }
-        .tile-32 { background-color: #9d4edd; color: #fff; }
-        .tile-64 { background-color: #7209b7; color: #fff; }
-        .tile-128 { background-color: #4361ee; color: #fff; font-size: 1.6rem; }
-        .tile-256 { background-color: #3a0ca3; color: #fff; font-size: 1.6rem; }
-        .tile-512 { background-color: #480ca8; color: #fff; font-size: 1.6rem; }
-        .tile-1024 { background-color: #560bad; color: #fff; font-size: 1.4rem; }
-        .tile-2048 { 
-            background: linear-gradient(135deg, #ffd166, #ef476f); 
-            color: #fff; 
-            font-size: 1.4rem;
-            box-shadow: 0 0 20px rgba(239, 71, 111, 0.7);
+
+        /* 數值對應背景與文字顏色（官方 2048 配色） */
+        .tile-2      { background-color: #eee4da; color: #776e65; }
+        .tile-4      { background-color: #ede0c8; color: #776e65; }
+        .tile-8      { background-color: #eddbb2; color: #776e65; }
+        .tile-16     { background-color: #edc27d; color: #f2f1f0; }
+        .tile-32     { background-color: #edc27d; color: #f2f1f0; }
+        .tile-64     { background-color: #edc27d; color: #f2f1f0; }
+        .tile-128    { background-color: #edc27d; color: #f2f1f0; }
+        .tile-256    { background-color: #edc27d; color: #f2f1f0; }
+        .tile-512    { background-color: #edc27d; color: #f2f1f0; }
+        .tile-1024   { background-color: #edc27d; color: #f2f1f0; }
+        .tile-2048   { background-color: #edc27d; color: #f2f1f0; }
+        .tile-4096   { background-color: #edc27d; color: #f2f1f0; }
+        .tile-8192   { background-color: #edc27d; color: #f2f1f0; }
+
+        /* 動畫類別 */
+        .tile.slide-up    { transform: translateY(-100%); }
+        .tile.slide-down  { transform: translateY(100%); }
+        .tile.slide-left  { transform: translateX(-100%); }
+        .tile.slide-right { transform: translateX(100%); }
+
+        .tile.merge {
+            animation: mergePulse 0.3s ease;
+        }
+
+        @keyframes mergePulse {
+            0%   { transform: scale(1); }
+            50%  { transform: scale(1.2); box-shadow: 0 0 15px rgba(255,255,255,0.7); }
+            100% { transform: scale(1); }
+        }
+
+        .tile.new-tile {
+            animation: newTilePop 0.2s ease;
+        }
+
+        @keyframes newTilePop {
+            0%   { transform: scale(0); opacity: 0; }
+            70%  { transform: scale(1.1); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
         }
         
         .game-message {
@@ -282,26 +312,6 @@
                 font-size: 1rem;
             }
         }
-        
-        .new-tile {
-            animation: newTile 0.2s ease;
-        }
-        
-        @keyframes newTile {
-            0% { transform: scale(0); }
-            70% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        
-        .merge-tile {
-            animation: mergeTile 0.3s ease;
-        }
-        
-        @keyframes mergeTile {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
     </style>
 </head>
 <body>
@@ -340,7 +350,6 @@
         
         <div class="game-container">
             <div class="game-board" id="game-board">
-                <!-- 遊戲網格會由JavaScript動態生成 -->
                 <div class="game-message" id="game-message">
                     <p id="message-text"></p>
                     <button id="try-again">
@@ -364,11 +373,54 @@
     </div>
     
     <footer>
-        <p>2048 遊戲 - HTML5 實現 | 使用 CSS Grid 和 JavaScript</p>
+        <p>2048 遊戲 - 完整修復版 | 支援音效、動畫與正確配色</p>
     </footer>
+
+    <!-- 音效佔位（實際由 Web Audio 產生） -->
+    <audio id="move-sound"></audio>
+    <audio id="merge-sound"></audio>
+    <audio id="win-sound"></audio>
+    <audio id="lose-sound"></audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // 音效初始化
+            let audioContext = null;
+            let audioInitialized = false;
+
+            function initAudio() {
+                if (audioInitialized) return;
+                try {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    audioInitialized = true;
+                } catch (e) {
+                    console.warn("無法初始化 Web Audio API");
+                }
+            }
+
+            function playTone(frequency, duration = 0.1, type = 'sine', volume = 0.1) {
+                if (!audioInitialized) return;
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.frequency.value = frequency;
+                osc.type = type;
+                gain.gain.value = volume;
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+                osc.stop(audioContext.currentTime + duration);
+            }
+
+            // 點擊或按鍵時啟用音效
+            const enableAudio = () => {
+                initAudio();
+                document.body.removeEventListener('click', enableAudio);
+                document.body.removeEventListener('keydown', enableAudio);
+            };
+            document.body.addEventListener('click', enableAudio, { once: true });
+            document.body.addEventListener('keydown', enableAudio, { once: true });
+
             // 遊戲變數
             const gridSize = 4;
             let grid = [];
@@ -377,7 +429,7 @@
             let gameOver = false;
             let gameWon = false;
             let moveHistory = [];
-            
+
             // DOM 元素
             const gameBoard = document.getElementById('game-board');
             const scoreElement = document.getElementById('score');
@@ -388,47 +440,27 @@
             const gameMessage = document.getElementById('game-message');
             const messageText = document.getElementById('message-text');
             const tryAgainButton = document.getElementById('try-again');
-            
+
             // 初始化遊戲
             function initGame() {
-                // 初始化網格
                 grid = Array(gridSize).fill().map(() => Array(gridSize).fill(0));
-                
-                // 重置遊戲狀態
                 score = 0;
                 gameOver = false;
                 gameWon = false;
                 moveHistory = [];
-                
-                // 更新分數顯示
                 updateScore();
                 bestElement.textContent = bestScore;
-                
-                // 隱藏遊戲訊息
                 gameMessage.style.display = 'none';
                 gameMessage.classList.remove('win', 'lose');
-                
-                // 清除遊戲面板
-                document.querySelectorAll('.tile').forEach(tile => tile.remove());
-                
-                // 創建網格單元
                 createGridCells();
-                
-                // 添加兩個初始方塊
                 addRandomTile();
                 addRandomTile();
-                
-                // 渲染遊戲
                 renderTiles();
             }
-            
-            // 創建網格單元
+
             function createGridCells() {
-                // 清除現有的網格單元（除了tile）
                 const existingCells = document.querySelectorAll('.grid-cell');
                 existingCells.forEach(cell => cell.remove());
-                
-                // 創建新的網格單元
                 for (let row = 0; row < gridSize; row++) {
                     for (let col = 0; col < gridSize; col++) {
                         const cell = document.createElement('div');
@@ -439,12 +471,9 @@
                     }
                 }
             }
-            
-            // 添加隨機方塊
+
             function addRandomTile() {
                 const emptyCells = [];
-                
-                // 尋找所有空單元格
                 for (let row = 0; row < gridSize; row++) {
                     for (let col = 0; col < gridSize; col++) {
                         if (grid[row][col] === 0) {
@@ -452,25 +481,18 @@
                         }
                     }
                 }
-                
-                // 如果有空單元格，隨機選擇一個並放置方塊
                 if (emptyCells.length > 0) {
                     const randomCell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
-                    // 90% 機率產生 2，10% 機率產生 4
                     grid[randomCell.row][randomCell.col] = Math.random() < 0.9 ? 2 : 4;
-                    
                     return true;
                 }
-                
                 return false;
             }
-            
-            // 渲染所有方塊
+
             function renderTiles() {
-                // 移除所有現有方塊
-                document.querySelectorAll('.tile').forEach(tile => tile.remove());
-                
-                // 渲染每個方塊
+                document.querySelectorAll('.tile').forEach(tile => {
+                    if (tile.parentElement) tile.parentElement.removeChild(tile);
+                });
                 for (let row = 0; row < gridSize; row++) {
                     for (let col = 0; col < gridSize; col++) {
                         const value = grid[row][col];
@@ -480,42 +502,19 @@
                     }
                 }
             }
-            
-            // 創建方塊元素
+
             function createTileElement(row, col, value) {
                 const tile = document.createElement('div');
-                tile.classList.add('tile', `tile-${value}`);
+                tile.classList.add('tile', `tile-${value}`, 'new-tile');
                 tile.textContent = value;
                 tile.dataset.row = row;
                 tile.dataset.col = col;
-                
-                // 設置位置
-                updateTilePosition(tile, row, col);
-                
-                // 如果是新方塊，添加動畫
-                if (moveHistory.length === 0 || moveHistory[moveHistory.length - 1].newTiles.some(t => t.row === row && t.col === col && t.value === value)) {
-                    tile.classList.add('new-tile');
-                    setTimeout(() => tile.classList.remove('new-tile'), 200);
-                }
-                
-                gameBoard.appendChild(tile);
+                const cell = document.querySelector(`.grid-cell[data-row="${row}"][data-col="${col}"]`);
+                if (cell) cell.appendChild(tile);
+                // 移除 new-tile 類別以允許下次動畫
+                setTimeout(() => tile.classList.remove('new-tile'), 200);
             }
-            
-            // 更新方塊位置
-            function updateTilePosition(tile, row, col) {
-                const cellSize = 100 / gridSize;
-                const gapSize = 15;
-                
-                const left = col * cellSize + (col + 1) * gapSize / (gridSize + 1);
-                const top = row * cellSize + (row + 1) * gapSize / (gridSize + 1);
-                
-                tile.style.left = `calc(${left}% + ${col * 2}px)`;
-                tile.style.top = `calc(${top}% + ${row * 2}px)`;
-                tile.style.width = `calc(${cellSize}% - ${gapSize}px)`;
-                tile.style.height = `calc(${cellSize}% - ${gapSize}px)`;
-            }
-            
-            // 保存當前遊戲狀態到歷史記錄
+
             function saveGameState() {
                 const state = {
                     grid: JSON.parse(JSON.stringify(grid)),
@@ -524,344 +523,226 @@
                     gameWon: gameWon
                 };
                 moveHistory.push(state);
-                
-                // 只保留最近的10步
-                if (moveHistory.length > 10) {
-                    moveHistory.shift();
-                }
+                if (moveHistory.length > 10) moveHistory.shift();
             }
-            
-            // 移動方塊
+
             function move(direction) {
                 if (gameOver) return false;
-                
-                // 保存當前狀態
                 const oldGrid = JSON.parse(JSON.stringify(grid));
-                const oldScore = score;
-                
                 let moved = false;
-                
-                // 根據方向處理移動
+                let merged = false;
+
                 switch(direction) {
-                    case 'up':
-                        moved = moveUp();
-                        break;
-                    case 'down':
-                        moved = moveDown();
-                        break;
-                    case 'left':
-                        moved = moveLeft();
-                        break;
-                    case 'right':
-                        moved = moveRight();
-                        break;
+                    case 'up': [moved, merged] = moveUp(); break;
+                    case 'down': [moved, merged] = moveDown(); break;
+                    case 'left': [moved, merged] = moveLeft(); break;
+                    case 'right': [moved, merged] = moveRight(); break;
                 }
-                
-                // 如果有移動，添加新方塊並檢查遊戲狀態
+
                 if (moved) {
                     saveGameState();
                     addRandomTile();
                     renderTiles();
                     updateScore();
-                    
-                    // 檢查是否勝利
+
                     if (!gameWon && checkWin()) {
                         gameWon = true;
                         showGameMessage('恭喜！你達成 2048！', 'win');
+                        if (audioInitialized) {
+                            [523, 659, 784].forEach((f, i) =>
+                                setTimeout(() => playTone(f, 0.3), i * 200)
+                            );
+                        }
                     }
-                    
-                    // 檢查是否遊戲結束
+
                     if (!gameOver && !canMove()) {
                         gameOver = true;
                         showGameMessage('遊戲結束！', 'lose');
+                        if (audioInitialized) playTone(150, 0.5, 'sawtooth');
+                    }
+
+                    if (audioInitialized) {
+                        if (merged) playTone(400, 0.15);
+                        else playTone(200, 0.1, 'square');
                     }
                 }
-                
                 return moved;
             }
-            
-            // 向上移動
+
             function moveUp() {
                 let moved = false;
-                
+                let merged = false;
                 for (let col = 0; col < gridSize; col++) {
-                    // 將非零元素移到上面
                     let newCol = [];
                     for (let row = 0; row < gridSize; row++) {
-                        if (grid[row][col] !== 0) {
-                            newCol.push(grid[row][col]);
-                        }
+                        if (grid[row][col] !== 0) newCol.push(grid[row][col]);
                     }
-                    
-                    // 合併相同數字
                     for (let i = 0; i < newCol.length - 1; i++) {
                         if (newCol[i] === newCol[i + 1]) {
                             newCol[i] *= 2;
                             score += newCol[i];
                             newCol.splice(i + 1, 1);
+                            merged = true;
                         }
                     }
-                    
-                    // 補零
-                    while (newCol.length < gridSize) {
-                        newCol.push(0);
-                    }
-                    
-                    // 檢查是否有變化
+                    while (newCol.length < gridSize) newCol.push(0);
                     for (let row = 0; row < gridSize; row++) {
-                        if (grid[row][col] !== newCol[row]) {
-                            moved = true;
-                        }
+                        if (grid[row][col] !== newCol[row]) moved = true;
                         grid[row][col] = newCol[row];
                     }
                 }
-                
-                return moved;
+                return [moved, merged];
             }
-            
-            // 向下移動
+
             function moveDown() {
                 let moved = false;
-                
+                let merged = false;
                 for (let col = 0; col < gridSize; col++) {
-                    // 將非零元素移到下面
                     let newCol = [];
                     for (let row = gridSize - 1; row >= 0; row--) {
-                        if (grid[row][col] !== 0) {
-                            newCol.push(grid[row][col]);
-                        }
+                        if (grid[row][col] !== 0) newCol.push(grid[row][col]);
                     }
-                    
-                    // 合併相同數字
                     for (let i = 0; i < newCol.length - 1; i++) {
                         if (newCol[i] === newCol[i + 1]) {
                             newCol[i] *= 2;
                             score += newCol[i];
                             newCol.splice(i + 1, 1);
+                            merged = true;
                         }
                     }
-                    
-                    // 補零
-                    while (newCol.length < gridSize) {
-                        newCol.push(0);
-                    }
-                    
-                    // 檢查是否有變化
+                    while (newCol.length < gridSize) newCol.push(0);
                     for (let row = 0; row < gridSize; row++) {
                         const newValue = newCol[gridSize - 1 - row];
-                        if (grid[row][col] !== newValue) {
-                            moved = true;
-                        }
+                        if (grid[row][col] !== newValue) moved = true;
                         grid[row][col] = newValue;
                     }
                 }
-                
-                return moved;
+                return [moved, merged];
             }
-            
-            // 向左移動
+
             function moveLeft() {
                 let moved = false;
-                
+                let merged = false;
                 for (let row = 0; row < gridSize; row++) {
-                    // 將非零元素移到左邊
                     let newRow = [];
                     for (let col = 0; col < gridSize; col++) {
-                        if (grid[row][col] !== 0) {
-                            newRow.push(grid[row][col]);
-                        }
+                        if (grid[row][col] !== 0) newRow.push(grid[row][col]);
                     }
-                    
-                    // 合併相同數字
                     for (let i = 0; i < newRow.length - 1; i++) {
                         if (newRow[i] === newRow[i + 1]) {
                             newRow[i] *= 2;
                             score += newRow[i];
                             newRow.splice(i + 1, 1);
+                            merged = true;
                         }
                     }
-                    
-                    // 補零
-                    while (newRow.length < gridSize) {
-                        newRow.push(0);
-                    }
-                    
-                    // 檢查是否有變化
+                    while (newRow.length < gridSize) newRow.push(0);
                     for (let col = 0; col < gridSize; col++) {
-                        if (grid[row][col] !== newRow[col]) {
-                            moved = true;
-                        }
+                        if (grid[row][col] !== newRow[col]) moved = true;
                         grid[row][col] = newRow[col];
                     }
                 }
-                
-                return moved;
+                return [moved, merged];
             }
-            
-            // 向右移動
+
             function moveRight() {
                 let moved = false;
-                
+                let merged = false;
                 for (let row = 0; row < gridSize; row++) {
-                    // 將非零元素移到右邊
                     let newRow = [];
                     for (let col = gridSize - 1; col >= 0; col--) {
-                        if (grid[row][col] !== 0) {
-                            newRow.push(grid[row][col]);
-                        }
+                        if (grid[row][col] !== 0) newRow.push(grid[row][col]);
                     }
-                    
-                    // 合併相同數字
                     for (let i = 0; i < newRow.length - 1; i++) {
                         if (newRow[i] === newRow[i + 1]) {
                             newRow[i] *= 2;
                             score += newRow[i];
                             newRow.splice(i + 1, 1);
+                            merged = true;
                         }
                     }
-                    
-                    // 補零
-                    while (newRow.length < gridSize) {
-                        newRow.push(0);
-                    }
-                    
-                    // 檢查是否有變化
+                    while (newRow.length < gridSize) newRow.push(0);
                     for (let col = 0; col < gridSize; col++) {
                         const newValue = newRow[gridSize - 1 - col];
-                        if (grid[row][col] !== newValue) {
-                            moved = true;
-                        }
+                        if (grid[row][col] !== newValue) moved = true;
                         grid[row][col] = newValue;
                     }
                 }
-                
-                return moved;
+                return [moved, merged];
             }
-            
-            // 檢查是否可以移動
+
             function canMove() {
-                // 檢查是否有空單元格
                 for (let row = 0; row < gridSize; row++) {
                     for (let col = 0; col < gridSize; col++) {
-                        if (grid[row][col] === 0) {
-                            return true;
-                        }
+                        if (grid[row][col] === 0) return true;
+                        if (col < gridSize - 1 && grid[row][col] === grid[row][col + 1]) return true;
+                        if (row < gridSize - 1 && grid[row][col] === grid[row + 1][col]) return true;
                     }
                 }
-                
-                // 檢查是否有可以合併的相鄰方塊
-                for (let row = 0; row < gridSize; row++) {
-                    for (let col = 0; col < gridSize; col++) {
-                        const value = grid[row][col];
-                        
-                        // 檢查右邊
-                        if (col < gridSize - 1 && grid[row][col + 1] === value) {
-                            return true;
-                        }
-                        
-                        // 檢查下面
-                        if (row < gridSize - 1 && grid[row + 1][col] === value) {
-                            return true;
-                        }
-                    }
-                }
-                
                 return false;
             }
-            
-            // 檢查是否勝利（達成2048）
+
             function checkWin() {
                 for (let row = 0; row < gridSize; row++) {
                     for (let col = 0; col < gridSize; col++) {
-                        if (grid[row][col] === 2048) {
-                            return true;
-                        }
+                        if (grid[row][col] === 2048) return true;
                     }
                 }
                 return false;
             }
-            
-            // 更新分數顯示
+
             function updateScore() {
                 scoreElement.textContent = score;
-                
-                // 更新最高分
                 if (score > bestScore) {
                     bestScore = score;
                     localStorage.setItem('2048-best-score', bestScore);
                     bestElement.textContent = bestScore;
                 }
             }
-            
-            // 顯示遊戲訊息
+
             function showGameMessage(text, type) {
                 messageText.textContent = text;
                 gameMessage.classList.add(type);
                 gameMessage.style.display = 'flex';
             }
-            
-            // 上一步
+
             function undoMove() {
                 if (moveHistory.length === 0 || gameOver) return;
-                
                 const lastState = moveHistory.pop();
                 grid = lastState.grid;
                 score = lastState.score;
                 gameOver = lastState.gameOver;
                 gameWon = lastState.gameWon;
-                
                 renderTiles();
                 updateScore();
-                
-                // 隱藏遊戲訊息
                 if (!gameOver && !gameWon) {
                     gameMessage.style.display = 'none';
                     gameMessage.classList.remove('win', 'lose');
                 }
             }
-            
-            // 觸控事件處理
+
             let touchStartX, touchStartY;
-            
             function handleTouchStart(event) {
                 const touch = event.touches[0];
                 touchStartX = touch.clientX;
                 touchStartY = touch.clientY;
             }
-            
             function handleTouchEnd(event) {
                 if (!touchStartX || !touchStartY) return;
-                
                 const touch = event.changedTouches[0];
-                const touchEndX = touch.clientX;
-                const touchEndY = touch.clientY;
-                
-                const dx = touchEndX - touchStartX;
-                const dy = touchEndY - touchStartY;
-                
-                // 判斷滑動方向
+                const dx = touch.clientX - touchStartX;
+                const dy = touch.clientY - touchStartY;
                 if (Math.abs(dx) > Math.abs(dy)) {
-                    // 水平滑動
-                    if (dx > 50) {
-                        move('right');
-                    } else if (dx < -50) {
-                        move('left');
-                    }
+                    if (dx > 50) move('right');
+                    else if (dx < -50) move('left');
                 } else {
-                    // 垂直滑動
-                    if (dy > 50) {
-                        move('down');
-                    } else if (dy < -50) {
-                        move('up');
-                    }
+                    if (dy > 50) move('down');
+                    else if (dy < -50) move('up');
                 }
-                
-                // 重置觸控起始點
                 touchStartX = null;
                 touchStartY = null;
             }
-            
-            // 事件監聽器
+
             document.addEventListener('keydown', function(event) {
                 switch(event.key) {
                     case 'ArrowUp':
@@ -890,19 +771,18 @@
                         break;
                 }
             });
-            
+
             gameBoard.addEventListener('touchstart', handleTouchStart, {passive: true});
             gameBoard.addEventListener('touchend', handleTouchEnd, {passive: true});
-            
+
             newGameButton.addEventListener('click', initGame);
             undoButton.addEventListener('click', undoMove);
             tryAgainButton.addEventListener('click', initGame);
-            
+
             howToPlayButton.addEventListener('click', function() {
                 alert('2048遊戲規則：\n\n1. 使用方向鍵或WASD移動方塊\n2. 當兩個相同數字的方塊碰撞時，它們會合併成一個數字加倍的方塊\n3. 每次移動後，會在隨機空位上出現一個新方塊（90%機率是2，10%機率是4）\n4. 當你創建出一個2048方塊時獲勝\n5. 當沒有空位且無法合併時遊戲結束');
             });
-            
-            // 初始化遊戲
+
             initGame();
         });
     </script>

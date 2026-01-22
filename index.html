@@ -13,7 +13,12 @@
             padding: 40px;
         }
         h1 { margin-bottom: 30px; }
-        .games { display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; }
+        .games {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
         .game-card {
             background: #2d2d44;
             padding: 25px 35px;
@@ -21,9 +26,17 @@
             text-decoration: none;
             color: white;
             transition: 0.3s;
+            display: inline-block; /* 可選：確保不會被拉伸 */
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
-        .game-card:hover { background: #3d3d5c; transform: scale(1.05); }
-        .icon { font-size: 2em; }
+        .game-card:hover {
+            background: #3d3d5c;
+            transform: scale(1.05);
+        }
+        .icon {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -37,10 +50,14 @@
             <div class="icon">✊</div>
             <div>2048</div>
         </a>
-        <!-- 加更多遊戲 -->
-         <a href="game3.html" class="game-card">
+        <a href="game3.html" class="game-card">
             <div class="icon">✊</div>
             <div>數獨</div>
+        </a>
+        <a href="game4.html" class="game-card">
+            <div class="icon">✊</div>
+            <div>小車躲避障礙物</div>
+        </a>
     </div>
 </body>
 </html>
