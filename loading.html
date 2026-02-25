@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff6bb5",
+                        "background-dark": "#1a1a2e",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "1rem", "lg": "2rem", "xl": "3rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .bg-pattern {
+                background-color: #1a1a2e;
+                background-image: radial-gradient(#ff6bb5 0.5px, transparent 0.5px), radial-gradient(#ff6bb5 0.5px, #1a1a2e 0.5px);
+                background-size: 40px 40px;
+                background-position: 0 0, 20px 20px;
+                opacity: 0.15;
+            }
+            @keyframes snake-rotate {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+            .snake-circle {
+                animation: snake-rotate 2s infinite linear;
+            }
+            @keyframes progress-pulse {
+                0%, 100% { opacity: 1; }
+                50% { opacity: 0.8; }
+            }
+            .pulse-soft {
+                animation: progress-pulse 2s infinite ease-in-out;
+            }
+            @keyframes floating {
+                0%, 100% { transform: translateY(0px); }
+                50% { transform: translateY(-15px); }
+            }
+            .float {
+                animation: floating 4s infinite ease-in-out;
+            }
+            @keyframes shimmer {
+                0% { transform: translateX(-100%); }
+                100% { transform: translateX(200%); }
+            }
+            .animate-shimmer {
+                animation: shimmer 2s infinite linear;
+            }
+            .glow-trail {
+                filter: drop-shadow(0 0 10px rgba(255, 107, 181, 0.6));
+            }
+        }
+    </style>
+</head>
+<body class="bg-background-dark font-display min-h-screen flex flex-col items-center justify-center overflow-hidden text-white relative">
+    <div class="fixed inset-0 bg-pattern pointer-events-none"></div>
+    <div class="fixed top-20 left-20 text-primary/10 select-none pointer-events-none float" style="animation-delay: 0s;">
+        <span class="material-icons text-[120px] rotate-12">extension</span>
+    </div>
+    <div class="fixed bottom-20 right-20 text-primary/10 select-none pointer-events-none float" style="animation-delay: 1s;">
+        <span class="material-icons text-[120px] -rotate-12">videogame_asset</span>
+    </div>
+    <div class="fixed top-1/2 left-10 text-primary/10 select-none pointer-events-none float" style="animation-delay: 0.5s;">
+        <span class="material-icons text-[140px]">stars</span>
+    </div>
+    <main class="relative z-10 flex flex-col items-center w-full max-w-[500px] px-8 text-center">
+        <div class="mb-10 relative flex items-center justify-center">
+            <div class="absolute w-56 h-56 bg-primary/15 rounded-full blur-[60px] pulse-soft"></div>
+            <div class="relative w-44 h-44 snake-circle">
+                <svg class="w-full h-full glow-trail" viewBox="0 0 100 100">
+                    <circle class="opacity-10" cx="50" cy="50" fill="transparent" r="40" stroke="#ff6bb5" stroke-width="8"></circle>
+                    <circle cx="50" cy="50" fill="transparent" r="40" stroke="#ff6bb5" stroke-dasharray="160 250" stroke-linecap="round" stroke-width="8"></circle>
+                    <circle class="opacity-40" cx="50" cy="50" fill="transparent" r="40" stroke="white" stroke-dasharray="20 280" stroke-linecap="round" stroke-width="4"></circle>
+                    <circle cx="85" cy="28" fill="#ff6bb5" r="7"></circle>
+                    <circle cx="86" cy="27" fill="white" r="2.5"></circle>
+                </svg>
+            </div>
+            <div class="absolute flex items-center justify-center">
+                <span class="material-icons text-primary text-7xl float">sports_esports</span>
+            </div>
+        </div>
+        <div class="mb-12">
+            <h1 class="text-[42px] font-extrabold text-white mb-2 tracking-tight leading-tight">
+                正在加載遊戲...
+            </h1>
+            <p class="text-primary font-bold text-lg tracking-[0.15em] uppercase">
+                Edna's Game Center
+            </p>
+            <p class="text-gray-400 mt-4 text-lg" id="game-name">準備進入遊戲世界</p>
+        </div>
+        <div class="w-full max-w-md mb-12">
+            <div class="h-3 bg-gray-800 rounded-full overflow-hidden">
+                <div class="h-full bg-gradient-to-r from-primary to-purple-500 rounded-full animate-shimmer" style="width: 80%"></div>
+            </div>
+            <div class="flex justify-between mt-2 text-sm text-gray-400">
+                <span>載入中</span>
+                <span id="progress-text">80%</span>
+            </div>
+        </div>
+        <div class="text-gray-500 text-sm">
+            <p>請稍候，我們正在為您準備最佳的遊戲體驗</p>
+            <p class="mt-1">遊戲即將開始...</p>
+        </div>
+    </main>
+    <script>
+        // 從 URL 參數獲取遊戲名稱
+        const urlParams = new URLSearchParams(window.location.search);
+        const gameName = urlParams.get('game') || '未知遊戲';
+        const gameFile = urlParams.get('file') || 'game1.html';
+        
+        // 更新遊戲名稱顯示
+        document.getElementById('game-name').textContent = `即將進入：${gameName}`;
+        
+        // 模擬載入進度
+        let progress = 0;
+        const progressBar = document.querySelector('.animate-shimmer');
+        const progressText = document.getElementById('progress-text');
+        
+        const interval = setInterval(() => {
+            progress += Math.random() * 15;
+            if (progress > 100) progress = 100;
+            
+            progressBar.style.width = `${progress}%`;
+            progressText.textContent = `${Math.floor(progress)}%`;
+            
+            if (progress >= 100) {
+                clearInterval(interval);
+                // 3秒後跳轉到遊戲
+                setTimeout(() => {
+                    window.location.href = gameFile;
+                }, 3000);
+            }
+        }, 300);
+        
+        // 如果 10 秒後還在這個頁面，強制跳轉
+        setTimeout(() => {
+            window.location.href = gameFile;
+        }, 10000);
+    </script>
+</body>
+</html>

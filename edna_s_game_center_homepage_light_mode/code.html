@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Edna's Game Center</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Noto+Sans+TC:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff6bb5",
+                        "primary-dark": "#e05ba0", 
+                        "primary-light": "#ffb3d9",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#230f19",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2f1523",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "1rem", 
+                        "xl": "1.5rem", 
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(255, 107, 181, 0.15)',
+                        'glow': '0 0 20px rgba(255, 107, 181, 0.3)',
+                    }
+                },
+            },
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
+        }
+        .pattern-bg {
+            background-image: radial-gradient(#ff6bb5 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.08;
+        }
+        .dark .pattern-bg {
+            opacity: 0.15;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+<div class="fixed inset-0 pattern-bg pointer-events-none z-0"></div>
+<header class="sticky top-0 z-50 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-primary/10 dark:border-primary/20 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-20">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-10 h-10 bg-gradient-to-tr from-primary to-primary-light rounded-xl flex items-center justify-center text-white shadow-glow transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+<span class="material-icons text-2xl">sports_esports</span>
+</div>
+<div class="flex flex-col">
+<h1 class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">
+                            Edna's <span class="text-primary">Game Center</span>
+</h1>
+<span class="text-xs font-medium text-primary/80 dark:text-primary-light font-body">玩得開心，笑得燦爛！</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4 md:gap-6">
+<nav class="hidden lg:flex gap-6 text-sm font-semibold">
+<a class="text-primary hover:text-primary-dark transition-colors" href="#">首頁</a>
+<a class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary-light transition-colors" href="#">排行榜</a>
+<a class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary-light transition-colors" href="#">關於我們</a>
+</nav>
+<div class="flex items-center gap-3">
+<button class="relative inline-flex h-9 w-16 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark" id="theme-toggle">
+<span class="sr-only">Toggle Dark Mode</span>
+<span class="translate-x-1 inline-block h-7 w-7 transform rounded-full bg-white shadow-md transition-transform duration-300 flex items-center justify-center" id="toggle-circle">
+<span class="material-icons text-yellow-500 text-sm opacity-100 dark:opacity-0 absolute transition-opacity">wb_sunny</span>
+<span class="material-icons text-primary text-sm opacity-0 dark:opacity-100 absolute transition-opacity">dark_mode</span>
+</span>
+</button>
+<button class="hidden sm:flex items-center gap-2 px-5 py-2 bg-white dark:bg-surface-dark border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-full transition-all duration-300 text-sm">
+<span class="material-symbols-outlined text-[18px]">person</span>
+<span>登入</span>
+</button>
+<button class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+<span class="material-icons">menu</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-grow z-10 relative">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+<div class="mb-12 text-center">
+<div class="inline-block px-4 py-1.5 rounded-full bg-primary/10 text-primary font-bold text-sm mb-4 border border-primary/20">
+                ✨ 歡迎來到愛娜的快樂天地
+            </div>
+<h2 class="text-4xl md:text-5xl font-black text-gray-900 dark:text-white mb-4 tracking-tight">
+                準備好 <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">大顯身手</span> 了嗎？
+            </h2>
+<p class="text-lg text-gray-600 dark:text-gray-300 font-body max-w-2xl mx-auto">
+                選擇一款遊戲，放鬆心情，挑戰自我！這裡充滿了可愛與樂趣。
+            </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+<div class="group relative bg-surface-light dark:bg-surface-dark rounded-2xl p-8 shadow-soft hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col h-full">
+<div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-2xl bg-gradient-to-br from-green-400 to-emerald-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+<img alt="Snake" class="w-12 h-12 object-contain opacity-90 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC311RRdLsCWG-XvrIvs0qHTWrl4OHgMo5_Ed8mOVmM7jIoVDYnRvg0Qptc5qamfM12mD8P3P5qJ_X6r_Gnom8kzwLTSvlGNJlz7qMzLVPwfhNVv3abSlkgWQ6m4snWF1dFnM_4psnKB7CzLCwqJTpVdidVtphsRhHlrba2VWLFyruY4q6JVtYamDr9jZXGemJWPK2GYUOWs-3kXXTEKKQqjsAsKXTjGObM8HNQcrwTnWZRrlBp6jywNGQB7cJBx-O8JaBZCgYoCw"/>
+<span class="material-icons text-white text-4xl absolute">gesture</span>
+</div>
+<div class="mt-14 text-center flex-grow">
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">貪吃蛇 Snake</h3>
+<p class="text-gray-500 dark:text-gray-400 text-base font-body leading-relaxed">
+                        經典回憶重現！控制可愛的小蛇吃掉蘋果，挑戰你的反應極限，別撞到自己喔！
+                    </p>
+</div>
+<div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+<button class="w-full py-4 px-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-primary/30 flex items-center justify-center gap-2 group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-purple-500 text-lg">
+<span>開始遊戲</span>
+<span class="material-icons text-xl group-hover:translate-x-1 transition-transform">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="group relative bg-surface-light dark:bg-surface-dark rounded-2xl p-8 shadow-soft hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col h-full">
+<div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-2xl bg-gradient-to-br from-yellow-400 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+<img alt="2048" class="w-12 h-12 object-contain opacity-90 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYwVe95suS1aJv5T_j55g0mBOBlQExfygzFQS2kcP0jYLMPMm4HG4aTn0_2AyQYCsxgd9t0cyH-Vvq3vboq8oCerriGu1hgC4NR3VJ7cPFJOYPv6HzokbEnEE_nDNFY3_AssqygrCXrKiZsiVo9TjaX7H6piYp36Lz_YfZfVE--sFgCNYZU7ynDzct9RsaqRJDTMM1lADoUCJ0VpO4r_TLiT0sqGDZMBojXY98RShgXsSBwpDxpIJGpRm5ssHvO7UlwbB4YN5UEQ"/>
+<span class="material-icons text-white text-4xl absolute">grid_view</span>
+</div>
+<div class="mt-14 text-center flex-grow">
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">2048 數字拼圖</h3>
+<p class="text-gray-500 dark:text-gray-400 text-base font-body leading-relaxed">
+                        簡單卻令人著迷的數字遊戲。滑動方塊，動動腦筋，合成出傳說中的 2048！
+                    </p>
+</div>
+<div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+<button class="w-full py-4 px-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-primary/30 flex items-center justify-center gap-2 group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-purple-500 text-lg">
+<span>開始遊戲</span>
+<span class="material-icons text-xl group-hover:translate-x-1 transition-transform">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="group relative bg-surface-light dark:bg-surface-dark rounded-2xl p-8 shadow-soft hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col h-full">
+<div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-400 to-indigo-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+<img alt="Sudoku" class="w-12 h-12 object-contain opacity-90 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAGqrSJGjMHukhmgxz47AQhlJ7rtmztJQjVzR-fiP-BkYhPN74BMF4zRzyWCEXOc69IKGNU8s41wJgty4ADGlCX7sn3U3gSSha_ZvA5KhkyT9vce1QTLpJ55HPHDBlfceT_HJjGkU1FwSbjLkhSp5dI-ma5s8dUS7CcJMaZ5WO1-veassU4IaZhsRaCmcnshSrGJmIjbMcw1UJlNyHIqxELTfP_1V4bOkPN8XnnMhsMds1sjwlOqa433QIbIpPgR6zStx_dzu1ejQ"/>
+<span class="material-icons text-white text-4xl absolute">calculate</span>
+</div>
+<div class="mt-14 text-center flex-grow">
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">數獨 Sudoku</h3>
+<p class="text-gray-500 dark:text-gray-400 text-base font-body leading-relaxed">
+                        邏輯推理的極致享受。在九宮格中填入數字，訓練你的大腦，享受解謎的成就感！
+                    </p>
+</div>
+<div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+<button class="w-full py-4 px-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-primary/30 flex items-center justify-center gap-2 group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-purple-500 text-lg">
+<span>開始遊戲</span>
+<span class="material-icons text-xl group-hover:translate-x-1 transition-transform">play_arrow</span>
+</button>
+</div>
+</div>
+<div class="group relative bg-surface-light dark:bg-surface-dark rounded-2xl p-8 shadow-soft hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 border border-gray-100 dark:border-gray-800 flex flex-col h-full">
+<div class="absolute -top-6 left-1/2 transform -translate-x-1/2 w-20 h-20 rounded-2xl bg-gradient-to-br from-red-400 to-pink-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+<img alt="Car Dodge" class="w-12 h-12 object-contain opacity-90 mix-blend-overlay" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD5HudqRAEQlfes71LLLeFZLF2_YZyZ7iyYKrfkwkl4oy_0QcoH2j0dvV3_4dpqnffWLl3N8Pmp7zLBFgJ3KDSetCZNhvYS7ZCtZLCe-kwAvlleyrKrYeIRzk7ze83jgNp0ZTONuKZ_cWKsIJPuRvrGsQg1DPGZVgrtyGEtndIE4q52TdMTcEfEMpDeW-EZsfOPsAJmhup3J18y6EgZCChOCgdrU1XyPhCrEC8OSPiQZ27hc7wckbQZbvHDNlP8IjFjxEPM88zyzw"/>
+<span class="material-icons text-white text-4xl absolute">directions_car</span>
+</div>
+<div class="mt-14 text-center flex-grow">
+<h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">賽車閃避 Car Dodge</h3>
+<p class="text-gray-500 dark:text-gray-400 text-base font-body leading-relaxed">
+                        急速狂飆！在繁忙的公路上左右閃避，收集金幣，小心別撞上路障喔！
+                    </p>
+</div>
+<div class="mt-8 pt-8 border-t border-gray-100 dark:border-gray-800">
+<button class="w-full py-4 px-4 bg-primary hover:bg-primary-dark text-white rounded-xl font-bold transition-all duration-300 shadow-lg shadow-primary/30 flex items-center justify-center gap-2 group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-purple-500 text-lg">
+<span>開始遊戲</span>
+<span class="material-icons text-xl group-hover:translate-x-1 transition-transform">play_arrow</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+<div class="bg-white/50 dark:bg-surface-dark/50 p-6 rounded-2xl border border-primary/10 shadow-sm">
+<p class="text-3xl font-black text-primary">12k+</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">快樂玩家</p>
+</div>
+<div class="bg-white/50 dark:bg-surface-dark/50 p-6 rounded-2xl border border-primary/10 shadow-sm">
+<p class="text-3xl font-black text-primary">4.9</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">平均評分</p>
+</div>
+<div class="bg-white/50 dark:bg-surface-dark/50 p-6 rounded-2xl border border-primary/10 shadow-sm">
+<p class="text-3xl font-black text-primary">24/7</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">隨時暢玩</p>
+</div>
+<div class="bg-white/50 dark:bg-surface-dark/50 p-6 rounded-2xl border border-primary/10 shadow-sm">
+<p class="text-3xl font-black text-primary">100%</p>
+<p class="text-sm text-gray-500 dark:text-gray-400 font-medium mt-1">免費遊玩</p>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-white dark:bg-surface-dark border-t border-gray-100 dark:border-gray-800 z-10">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+<div class="flex flex-col md:flex-row justify-between items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-soft">E</div>
+<div class="flex flex-col">
+<span class="font-bold text-gray-800 dark:text-white">Edna's Game Center</span>
+<span class="text-xs text-gray-400">玩得開心，笑得燦爛！</span>
+</div>
+</div>
+<p class="text-gray-500 dark:text-gray-400 text-sm">
+                © 2024 Edna's Game Center. All rights reserved.
+            </p>
+<div class="flex items-center gap-1 text-sm text-gray-500 dark:text-gray-400">
+                Made with <span class="material-icons text-primary text-sm animate-pulse mx-1">favorite</span> by Edna
+            </div>
+</div>
+</div>
+</footer>
+<script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const toggleCircle = document.getElementById('toggle-circle');
+    const html = document.documentElement;
+    themeToggleBtn.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        if (html.classList.contains('dark')) {
+            toggleCircle.classList.add('translate-x-8');
+            toggleCircle.classList.remove('translate-x-1');
+        } else {
+            toggleCircle.classList.add('translate-x-1');
+            toggleCircle.classList.remove('translate-x-8');
+        }
+    });
+</script>
+
+</body></html>

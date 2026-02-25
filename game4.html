@@ -10,9 +10,43 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      background: linear-gradient(135deg, #0a0a1a, #15152b, #1a1a2e);
       font-family: 'Segoe UI', Arial, sans-serif;
       color: white;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* 背景裝飾元素 */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(79, 195, 247, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(255, 82, 82, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(76, 175, 80, 0.1) 0%, transparent 50%);
+      z-index: -1;
+      pointer-events: none;
+    }
+    
+    /* 閃爍星星效果 */
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.8; }
+    }
+    
+    .star {
+      position: fixed;
+      background-color: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite;
+      z-index: -1;
+      pointer-events: none;
     }
     canvas {
       border-radius: 8px;
@@ -49,13 +83,347 @@
       color: #ffd700;
       text-shadow: 0 0 6px rgba(255, 215, 0, 0.6);
     }
+    
+    /* 觸控控制按鈕 */
+    .mobile-controls {
+      display: none; /* 默認隱藏，在移動設備上顯示 */
+      margin-top: 20px;
+      margin-bottom: 15px;
+      gap: 30px;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .mobile-btn {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      border: none;
+      background: linear-gradient(to bottom, #4fc3f7, #0288d1);
+      color: white;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 150, 255, 0.4);
+      transition: transform 0.1s, background 0.2s, box-shadow 0.2s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+    }
+    
+    .mobile-btn:active {
+      transform: scale(0.95);
+      background: linear-gradient(to bottom, #29b6f6, #0277bd);
+      box-shadow: 0 2px 8px rgba(0, 150, 255, 0.3);
+    }
+    
+    .mobile-btn.left {
+      background: linear-gradient(to bottom, #ff9800, #f57c00);
+      box-shadow: 0 4px 15px rgba(255, 152, 0, 0.4);
+    }
+    
+    .mobile-btn.left:active {
+      background: linear-gradient(to bottom, #ffb74d, #ef6c00);
+      box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+    }
+    
+    .mobile-btn.right {
+      background: linear-gradient(to bottom, #4caf50, #388e3c);
+      box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+    }
+    
+    .mobile-btn.right:active {
+      background: linear-gradient(to bottom, #66bb6a, #2e7d32);
+      box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
+    }
+    
+    /* 遊戲統計樣式 */
+    .stats-container {
+      background: rgba(30, 30, 60, 0.9);
+      border-radius: 12px;
+      padding: 15px;
+      margin: 15px 0;
+      border: 2px solid rgba(100, 150, 255, 0.3);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    .stats-container h3 {
+      margin: 0 0 12px 0;
+      color: #4fc3f7;
+      text-align: center;
+      font-size: 18px;
+      text-shadow: 0 0 8px rgba(79, 195, 247, 0.5);
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    
+    .stat-item {
+      background: rgba(20, 20, 40, 0.7);
+      border-radius: 8px;
+      padding: 8px;
+      text-align: center;
+      border: 1px solid rgba(100, 150, 255, 0.2);
+    }
+    
+    .stat-label {
+      font-size: 12px;
+      color: #aaa;
+      margin-bottom: 4px;
+    }
+    
+    .stat-value {
+      font-size: 16px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    }
+    
+    #toggleStatsBtn {
+      width: 100%;
+      padding: 8px;
+      background: linear-gradient(to bottom, #4caf50, #388e3c);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: transform 0.1s, background 0.3s;
+    }
+    
+    #toggleStatsBtn:hover {
+      background: linear-gradient(to bottom, #66bb6a, #43a047);
+      transform: scale(1.02);
+    }
+    
+    #toggleStatsBtn:active {
+      transform: scale(0.98);
+    }
+    
+    /* 遊戲設置按鈕 */
+    #settingsBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+      background: linear-gradient(to bottom, #9c27b0, #7b1fa2);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-left: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: transform 0.1s, background 0.3s;
+    }
+    
+    #settingsBtn:hover {
+      background: linear-gradient(to bottom, #ab47bc, #8e24aa);
+      transform: scale(1.05);
+    }
+    
+    #settingsBtn:active {
+      transform: scale(0.95);
+    }
+    
+    /* 設置面板 */
+    .settings-panel {
+      background: rgba(30, 30, 60, 0.95);
+      border-radius: 12px;
+      padding: 20px;
+      margin: 15px 0;
+      border: 2px solid rgba(156, 39, 176, 0.5);
+      box-shadow: 0 4px 25px rgba(0, 0, 0, 0.5);
+      max-width: 400px;
+      width: 100%;
+    }
+    
+    .settings-panel h3 {
+      margin: 0 0 15px 0;
+      color: #ab47bc;
+      text-align: center;
+      font-size: 20px;
+      text-shadow: 0 0 8px rgba(171, 71, 188, 0.5);
+    }
+    
+    .setting-item {
+      margin-bottom: 15px;
+      padding: 10px;
+      background: rgba(20, 20, 40, 0.7);
+      border-radius: 8px;
+      border: 1px solid rgba(100, 150, 255, 0.2);
+    }
+    
+    .setting-item label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ddd;
+      font-weight: bold;
+    }
+    
+    .setting-item input[type="checkbox"] {
+      margin-right: 8px;
+      transform: scale(1.2);
+    }
+    
+    .setting-item select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      background: #1a1a2e;
+      color: white;
+      border: 1px solid #4fc3f7;
+      margin-top: 5px;
+    }
+    
+    .setting-item input[type="range"] {
+      width: 70%;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    
+    .setting-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    
+    .setting-buttons button {
+      flex: 1;
+      padding: 10px;
+      border-radius: 6px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    
+    .setting-buttons button:first-child {
+      background: linear-gradient(to bottom, #4caf50, #388e3c);
+      color: white;
+    }
+    
+    .setting-buttons button:last-child {
+      background: linear-gradient(to bottom, #f44336, #d32f2f);
+      color: white;
+    }
+    
+    .setting-buttons button:hover {
+      transform: scale(1.03);
+    }
+    
+    .setting-buttons button:active {
+      transform: scale(0.98);
+    }
+    
+    /* 移動設備適配 */
+    @media (max-width: 768px) {
+      canvas {
+        width: 95vw;
+        height: 70vh;
+        max-width: 400px;
+        max-height: 600px;
+      }
+      
+      .mobile-controls {
+        display: flex;
+      }
+      
+      body {
+        padding: 10px;
+      }
+    }
   </style>
 </head>
 <body>
 <div id="scoreDisplay">得分: 0</div>
 <div id="highScoreDisplay">最高分: 0</div>
+
+<div class="stats-container" id="statsContainer" style="display: none;">
+  <h3>遊戲統計</h3>
+  <div class="stats-grid">
+    <div class="stat-item">
+      <div class="stat-label">遊戲次數</div>
+      <div class="stat-value" id="statGamesPlayed">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">總距離</div>
+      <div class="stat-value" id="statTotalDistance">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">避開障礙</div>
+      <div class="stat-value" id="statObstaclesAvoided">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">變換車道</div>
+      <div class="stat-value" id="statLaneChanges">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">平均分數</div>
+      <div class="stat-value" id="statAverageScore">0</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-label">總遊玩時間</div>
+      <div class="stat-value" id="statTotalPlayTime">0秒</div>
+    </div>
+  </div>
+  <button id="toggleStatsBtn" onclick="toggleStats()">隱藏統計</button>
+</div>
+
 <canvas id="gameCanvas" width="400" height="600"></canvas>
+
+<div class="mobile-controls">
+  <button class="mobile-btn left" id="left-btn">←</button>
+  <button class="mobile-btn right" id="right-btn">→</button>
+</div>
+
 <button id="restartBtn" onclick="restartGame()">重新開始</button>
+<button id="settingsBtn" onclick="toggleSettings()">遊戲設置</button>
+
+<div class="settings-panel" id="settingsPanel" style="display: none;">
+  <h3>遊戲設置</h3>
+  
+  <div class="setting-item">
+    <label>
+      <input type="checkbox" id="soundToggle" checked> 啟用音效
+    </label>
+  </div>
+  
+  <div class="setting-item">
+    <label>遊戲難度:</label>
+    <select id="difficultySelect">
+      <option value="easy">簡單</option>
+      <option value="normal" selected>普通</option>
+      <option value="hard">困難</option>
+    </select>
+  </div>
+  
+  <div class="setting-item">
+    <label>小車顏色:</label>
+    <select id="carColorSelect">
+      <option value="#4fc3f7" selected>藍色</option>
+      <option value="#ff5252">紅色</option>
+      <option value="#4caf50">綠色</option>
+      <option value="#ff9800">橙色</option>
+    </select>
+  </div>
+  
+  <div class="setting-item">
+    <label>控制靈敏度:</label>
+    <input type="range" id="sensitivitySlider" min="1" max="10" value="5">
+    <span id="sensitivityValue">5</span>
+  </div>
+  
+  <div class="setting-buttons">
+    <button onclick="applySettings()">套用設定</button>
+    <button onclick="toggleSettings()">關閉</button>
+  </div>
+</div>
 
 <script>
   const canvas = document.getElementById('gameCanvas');
@@ -63,20 +431,25 @@
   const scoreDisplay = document.getElementById('scoreDisplay');
   const highScoreDisplay = document.getElementById('highScoreDisplay');
   const restartBtn = document.getElementById('restartBtn');
+  const leftBtn = document.getElementById('left-btn');
+  const rightBtn = document.getElementById('right-btn');
 
   // ✅ 調整車道：適配 400px 寬度，留出左右風景空間
   const lanes = [75, 200, 325]; // 左 中 右
   const laneDividers = [137, 263]; // (75+200)/2 ≈ 137, (200+325)/2 ≈ 263
 
   let playerLane = 1;
+  let carX = 200; // 小車當前X位置（用於動畫）
   const carWidth = 45; // 稍微加大
   const carHeight = 60;
+  const carAnimationSpeed = 0.2; // 動畫速度（0-1）
 
   // === 路邊風景物件 ===
   const scenery = [];
   function initScenery() {
     scenery.length = 0;
     const totalHeight = canvas.height + 600;
+    
     // 左側：房子 (x < 0)
     for (let y = -300; y < totalHeight; y += 130 + Math.random() * 90) {
       if (Math.random() > 0.4) {
@@ -89,6 +462,29 @@
         });
       }
     }
+    
+    // 左側：路燈
+    for (let y = -200; y < totalHeight; y += 80 + Math.random() * 60) {
+      if (Math.random() > 0.6) {
+        scenery.push({
+          type: 'streetLight',
+          x: -40 - Math.random() * 20,
+          y: y
+        });
+      }
+    }
+    
+    // 左側：交通標誌
+    for (let y = -150; y < totalHeight; y += 120 + Math.random() * 100) {
+      if (Math.random() > 0.7) {
+        scenery.push({
+          type: 'trafficSign',
+          x: -35 - Math.random() * 15,
+          y: y
+        });
+      }
+    }
+    
     // 右側：樹 (x > canvas.width)
     for (let y = -250; y < totalHeight; y += 110 + Math.random() * 80) {
       if (Math.random() > 0.3) {
@@ -99,6 +495,28 @@
           trunkWidth: 7 + Math.random() * 5,
           trunkHeight: 22 + Math.random() * 12,
           crownRadius: 14 + Math.random() * 7
+        });
+      }
+    }
+    
+    // 右側：灌木叢
+    for (let y = -180; y < totalHeight; y += 70 + Math.random() * 50) {
+      if (Math.random() > 0.5) {
+        scenery.push({
+          type: 'bush',
+          x: canvas.width + 20 + Math.random() * 25,
+          y: y
+        });
+      }
+    }
+    
+    // 背景：雲朵（在道路上方）
+    for (let y = -100; y < totalHeight; y += 150 + Math.random() * 100) {
+      if (Math.random() > 0.5) {
+        scenery.push({
+          type: 'cloud',
+          x: 50 + Math.random() * 300, // 在道路上方區域
+          y: y - 50 // 稍微向上偏移
         });
       }
     }
@@ -114,21 +532,272 @@
   let score = 0;
   let highScore = localStorage.getItem('carGameHighScore') || 0;
   highScoreDisplay.textContent = '最高分: ' + highScore;
+  let carColor = '#4fc3f7'; // 小車顏色，可通過設置更改
+
+  // === 遊戲統計系統 ===
+  let stats = {
+    gamesPlayed: parseInt(localStorage.getItem('carGameGamesPlayed')) || 0,
+    totalDistance: parseInt(localStorage.getItem('carGameTotalDistance')) || 0,
+    obstaclesAvoided: parseInt(localStorage.getItem('carGameObstaclesAvoided')) || 0,
+    laneChanges: parseInt(localStorage.getItem('carGameLaneChanges')) || 0,
+    totalScore: parseInt(localStorage.getItem('carGameTotalScore')) || 0,
+    totalPlayTime: parseInt(localStorage.getItem('carGameTotalPlayTime')) || 0,
+    gameStartTime: null
+  };
+  
+  // 統計顯示元素
+  const statsContainer = document.getElementById('statsContainer');
+  const statGamesPlayed = document.getElementById('statGamesPlayed');
+  const statTotalDistance = document.getElementById('statTotalDistance');
+  const statObstaclesAvoided = document.getElementById('statObstaclesAvoided');
+  const statLaneChanges = document.getElementById('statLaneChanges');
+  const statAverageScore = document.getElementById('statAverageScore');
+  const statTotalPlayTime = document.getElementById('statTotalPlayTime');
+  const toggleStatsBtn = document.getElementById('toggleStatsBtn');
+  
+  // 初始化統計顯示
+  function updateStatsDisplay() {
+    statGamesPlayed.textContent = stats.gamesPlayed;
+    statTotalDistance.textContent = Math.floor(stats.totalDistance / 100) + 'm';
+    statObstaclesAvoided.textContent = stats.obstaclesAvoided;
+    statLaneChanges.textContent = stats.laneChanges;
+    const avgScore = stats.gamesPlayed > 0 ? Math.floor(stats.totalScore / stats.gamesPlayed) : 0;
+    statAverageScore.textContent = avgScore;
+    statTotalPlayTime.textContent = Math.floor(stats.totalPlayTime / 1000) + '秒';
+  }
+  
+  // 保存統計到本地存儲
+  function saveStats() {
+    localStorage.setItem('carGameGamesPlayed', stats.gamesPlayed);
+    localStorage.setItem('carGameTotalDistance', stats.totalDistance);
+    localStorage.setItem('carGameObstaclesAvoided', stats.obstaclesAvoided);
+    localStorage.setItem('carGameLaneChanges', stats.laneChanges);
+    localStorage.setItem('carGameTotalScore', stats.totalScore);
+    localStorage.setItem('carGameTotalPlayTime', stats.totalPlayTime);
+  }
+  
+  // 切換統計顯示
+  function toggleStats() {
+    if (statsContainer.style.display === 'none') {
+      statsContainer.style.display = 'block';
+      toggleStatsBtn.textContent = '隱藏統計';
+      updateStatsDisplay();
+    } else {
+      statsContainer.style.display = 'none';
+      toggleStatsBtn.textContent = '顯示統計';
+    }
+  }
+  
+  // 開始遊戲時記錄時間
+  function startGameStats() {
+    stats.gameStartTime = Date.now();
+  }
+  
+  // 結束遊戲時更新統計
+  function endGameStats(finalScore) {
+    if (stats.gameStartTime) {
+      const playTime = Date.now() - stats.gameStartTime;
+      stats.totalPlayTime += playTime;
+      stats.gameStartTime = null;
+    }
+    
+    stats.gamesPlayed++;
+    stats.totalScore += finalScore;
+    // 距離基於分數（每分數代表一定距離）
+    stats.totalDistance += finalScore * 10;
+    
+    saveStats();
+    updateStatsDisplay();
+  }
+
+  // === 音效系統 ===
+  const soundEnabled = true;
+  let audioContext = null;
+  let soundVolume = 0.3;
+  let startSoundPlayed = false;
+  
+  // 初始化音效系統
+  function initAudio() {
+    if (!audioContext && soundEnabled) {
+      try {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      } catch (e) {
+        console.log('音效系統初始化失敗:', e);
+      }
+    }
+  }
+  
+  // 播放音效
+  function playSound(frequency, duration, type = 'sine', volume = soundVolume) {
+    if (!soundEnabled || !audioContext) return;
+    
+    try {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      oscillator.frequency.value = frequency;
+      oscillator.type = type;
+      gainNode.gain.setValueAtTime(volume, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + duration);
+    } catch (e) {
+      console.log('音效播放失敗:', e);
+    }
+  }
+  
+  // 車道切換音效
+  function playLaneChangeSound(direction) {
+    if (!soundEnabled) return;
+    const freq = direction === 'left' ? 300 : 350;
+    playSound(freq, 0.1, 'sine', soundVolume * 0.7);
+  }
+  
+  // 遊戲開始音效
+  function playStartSound() {
+    if (!soundEnabled || startSoundPlayed) return;
+    startSoundPlayed = true;
+    playSound(400, 0.2, 'sine', soundVolume);
+    setTimeout(() => playSound(500, 0.15, 'sine', soundVolume * 0.8), 100);
+  }
+  
+  // 得分音效
+  function playScoreSound() {
+    if (!soundEnabled) return;
+    playSound(600, 0.1, 'sine', soundVolume * 0.6);
+  }
+  
+  // 接近警告音效
+  function playWarningSound() {
+    if (!soundEnabled) return;
+    playSound(200, 0.15, 'square', soundVolume * 0.5);
+  }
+  
+  // 遊戲結束音效
+  function playGameOverSound() {
+    if (!soundEnabled) return;
+    playSound(150, 0.3, 'sawtooth', soundVolume);
+    setTimeout(() => playSound(100, 0.25, 'sawtooth', soundVolume * 0.8), 150);
+    setTimeout(() => playSound(80, 0.2, 'sawtooth', soundVolume * 0.6), 300);
+  }
+  
+  // 按鈕點擊音效
+  function playButtonSound() {
+    if (!soundEnabled) return;
+    playSound(250, 0.08, 'sine', soundVolume * 0.5);
+  }
+  
+  // 初始化音效
+  initAudio();
 
   initScenery();
 
-  // 按鍵控制
+  // 按鍵控制（添加音效）
   document.addEventListener('keydown', (e) => {
+    // 第一次按鍵時播放開始音效
+    if (!startSoundPlayed && !gameOver) {
+      playStartSound();
+    }
+    
     if (gameOver) return;
-    if (e.key === 'ArrowLeft' && playerLane > 0) playerLane--;
-    else if (e.key === 'ArrowRight' && playerLane < 2) playerLane++;
+    
+    // 防止箭頭鍵的默認行為（滾動頁面）
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+      e.preventDefault();
+    }
+    
+    if (e.key === 'ArrowLeft' && playerLane > 0) {
+      playerLane--;
+      playLaneChangeSound('left');
+      // 統計車道變換
+      if (typeof stats !== 'undefined') stats.laneChanges++;
+    }
+    else if (e.key === 'ArrowRight' && playerLane < 2) {
+      playerLane++;
+      playLaneChangeSound('right');
+      // 統計車道變換
+      if (typeof stats !== 'undefined') stats.laneChanges++;
+    }
   });
+
+  // 觸控控制按鈕事件
+  leftBtn.addEventListener('click', () => {
+    if (gameOver) return;
+    if (playerLane > 0) {
+      playerLane--;
+      playLaneChangeSound('left');
+      playButtonSound(); // 添加按鈕點擊音效
+      // 統計車道變換
+      if (typeof stats !== 'undefined') stats.laneChanges++;
+    }
+  });
+
+  rightBtn.addEventListener('click', () => {
+    if (gameOver) return;
+    if (playerLane < 2) {
+      playerLane++;
+      playLaneChangeSound('right');
+      playButtonSound(); // 添加按鈕點擊音效
+      // 統計車道變換
+      if (typeof stats !== 'undefined') stats.laneChanges++;
+    }
+  });
+
+  // 滑動控制（觸控設備）
+  let touchStartX = 0;
+  let touchStartY = 0;
+  const minSwipeDistance = 30; // 最小滑動距離（像素）
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (gameOver) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+  }, { passive: false });
+
+  canvas.addEventListener('touchend', (e) => {
+    if (gameOver) return;
+    
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const dx = touchEndX - touchStartX;
+    const dy = touchEndY - touchStartY;
+    
+    // 忽略垂直滑動，只處理水平滑動
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > minSwipeDistance) {
+      if (dx > 0 && playerLane < 2) {
+        // 向右滑動
+        playerLane++;
+        playLaneChangeSound('right');
+        playButtonSound();
+        // 統計車道變換
+        if (typeof stats !== 'undefined') stats.laneChanges++;
+      } else if (dx < 0 && playerLane > 0) {
+        // 向左滑動
+        playerLane--;
+        playLaneChangeSound('left');
+        playButtonSound();
+        // 統計車道變換
+        if (typeof stats !== 'undefined') stats.laneChanges++;
+      }
+    }
+    
+    e.preventDefault();
+  }, { passive: false });
 
   // 生成障礙物
   function spawnObstacle() {
     const lastObs = obstacles.length > 0 ? obstacles[obstacles.length - 1] : null;
-    if (lastObs && lastObs.y + carHeight + 150 > canvas.height) return;
-    if (obstacles.length >= 2) return;
+    // 增加障礙物之間的最小距離，從150像素增加到250像素
+    if (lastObs && lastObs.y + carHeight + 250 > canvas.height) return;
+    // 增加同時存在的障礙物數量限制
+    if (obstacles.length >= 3) return;
 
     let type, chosenLanes, attempts = 0;
     while (attempts < 10) {
@@ -155,7 +824,15 @@
     }
     if (attempts >= 10) return;
 
-    obstacles.push({ lanes: chosenLanes, y: -carHeight, width: carWidth, height: carHeight });
+    // 隨機選擇障礙物類型 (0-3)
+    const obstacleType = Math.floor(Math.random() * 4);
+    obstacles.push({
+      lanes: chosenLanes,
+      y: -carHeight,
+      width: carWidth,
+      height: carHeight,
+      type: obstacleType
+    });
   }
 
   // 更新邏輯
@@ -163,42 +840,82 @@
     if (gameOver) return;
 
     frameCount++;
-    score++;
+    // 每2幀增加1分，減慢分數增加速度
+    if (frameCount % 2 === 0) {
+      score++;
+    }
+    
+    // 每得100分播放得分音效並顯示特效（基於顯示分數）
+    const displayScore = Math.floor(score / 30);
+    if (displayScore > 0 && displayScore % 100 === 0 && frameCount % 60 === 0) {
+      playScoreSound();
+      // 添加得分特效
+      createScoreEffect(canvas.width / 2, 50);
+    }
+    
+    // 更新小車位置動畫
+    const targetX = lanes[playerLane];
+    carX += (targetX - carX) * carAnimationSpeed;
+    
     speed = Math.min(baseSpeed + Math.floor(score / 600) * 0.4, 9);
 
-    const spawnInterval = Math.max(30, 45 - Math.floor(score / 1000));
+    // 調整生成間隔，讓遊戲更容易
+    const spawnInterval = Math.max(40, 60 - Math.floor(score / 1500));
     if (frameCount % spawnInterval === 0) {
-      if (Math.random() > 0.4) spawnObstacle();
+      // 降低生成機率
+      if (Math.random() > 0.5) spawnObstacle();
     }
 
     // 更新障礙物
+    let warningPlayed = false;
     for (let i = obstacles.length - 1; i >= 0; i--) {
       obstacles[i].y += speed;
       if (obstacles[i].y > canvas.height) {
+        // 障礙物離開屏幕，計為成功避開
+        if (typeof stats !== 'undefined' && !obstacles[i].lanes.includes(playerLane)) {
+          stats.obstaclesAvoided++;
+        }
         obstacles.splice(i, 1);
         continue;
       }
 
       const playerY = canvas.height - carHeight - 20;
-      if (obstacles[i].lanes.includes(playerLane) && obstacles[i].y + carHeight > playerY) {
-        gameOver = true;
-        createExplosion(lanes[playerLane], playerY + carHeight / 2);
-        playSound(120, 0.15, 'square');
+      
+      // 檢查障礙物是否與玩家在同一車道且接近
+      if (obstacles[i].lanes.includes(playerLane)) {
+        const distance = playerY - (obstacles[i].y + carHeight);
         
-        const finalScore = Math.floor(score / 30);
-        if (finalScore > highScore) {
-          highScore = finalScore;
-          localStorage.setItem('carGameHighScore', highScore);
-          highScoreDisplay.textContent = '最高分: ' + highScore;
+        // 如果障礙物在玩家上方100像素內且未播放警告，播放警告音效
+        if (distance > 0 && distance < 150 && !warningPlayed && frameCount % 30 === 0) {
+          playWarningSound();
+          warningPlayed = true;
         }
         
-        // ✅ 關鍵修正：確保按鈕出現 + 滾動到可見位置
-        restartBtn.style.display = 'block';
-        setTimeout(() => {
-          restartBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          restartBtn.focus();
-        }, 100);
-        return;
+        // 檢查碰撞
+        if (obstacles[i].y + carHeight > playerY) {
+          gameOver = true;
+          createExplosion(lanes[playerLane], playerY + carHeight / 2);
+          playGameOverSound();
+          
+          const finalScore = Math.floor(score / 30);
+          
+          // 更新遊戲統計
+          endGameStats(finalScore);
+          
+          if (finalScore > highScore) {
+            highScore = finalScore;
+            localStorage.setItem('carGameHighScore', highScore);
+            highScoreDisplay.textContent = '最高分: ' + highScore;
+          }
+          
+          // ✅ 關鍵修正：確保按鈕出現 + 滾動到可見位置
+          restartBtn.style.display = 'block';
+          setTimeout(() => {
+            restartBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            restartBtn.focus();
+          }, 100);
+          return;
+        }
       }
     }
 
@@ -219,6 +936,12 @@
       if (p.life <= 0) particles.splice(i, 1);
     }
 
+    // 更新得分特效
+    updateScoreEffects();
+    
+    // 更新軌跡特效
+    updateTrailEffects();
+
     scoreDisplay.textContent = '得分: ' + Math.floor(score / 30);
   }
 
@@ -233,6 +956,102 @@
         color: `hsl(${Math.random() * 20 + 340}, 90%, 60%)`
       });
     }
+  }
+
+  // 得分特效系統
+  let scoreEffects = [];
+  
+  function createScoreEffect(x, y) {
+    scoreEffects.push({
+      x: x,
+      y: y,
+      life: 30, // 特效持續時間（幀）
+      scale: 1,
+      alpha: 1
+    });
+  }
+  
+  function updateScoreEffects() {
+    for (let i = scoreEffects.length - 1; i >= 0; i--) {
+      const effect = scoreEffects[i];
+      effect.life--;
+      effect.scale += 0.05;
+      effect.alpha = effect.life / 30;
+      
+      if (effect.life <= 0) {
+        scoreEffects.splice(i, 1);
+      }
+    }
+  }
+  
+  function drawScoreEffects() {
+    scoreEffects.forEach(effect => {
+      ctx.save();
+      ctx.globalAlpha = effect.alpha;
+      ctx.fillStyle = '#ffff00';
+      ctx.font = `bold ${24 * effect.scale}px Arial`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.shadowColor = '#ffff00';
+      ctx.shadowBlur = 10;
+      ctx.fillText('+100', effect.x, effect.y);
+      ctx.restore();
+    });
+  }
+
+  // 車道變換軌跡特效系統
+  let trailEffects = [];
+  let lastCarX = lanes[1]; // 初始位置
+  
+  function createTrailEffect(x, y) {
+    trailEffects.push({
+      x: x,
+      y: y,
+      life: 20, // 軌跡持續時間（幀）
+      alpha: 0.7,
+      scale: 1.0
+    });
+  }
+  
+  function updateTrailEffects() {
+    // 檢查小車是否移動了足夠距離，如果是則創建軌跡
+    const currentCarX = carX;
+    if (Math.abs(currentCarX - lastCarX) > 5) {
+      createTrailEffect(lastCarX, canvas.height - carHeight - 20);
+      lastCarX = currentCarX;
+    }
+    
+    // 更新所有軌跡
+    for (let i = trailEffects.length - 1; i >= 0; i--) {
+      const trail = trailEffects[i];
+      trail.life--;
+      trail.alpha = trail.life / 20;
+      trail.scale = 0.8 + (trail.life / 20) * 0.2;
+      
+      if (trail.life <= 0) {
+        trailEffects.splice(i, 1);
+      }
+    }
+  }
+  
+  function drawTrailEffects() {
+    trailEffects.forEach(trail => {
+      ctx.save();
+      ctx.globalAlpha = trail.alpha * 0.5;
+      ctx.fillStyle = carColor;
+      ctx.shadowColor = carColor;
+      ctx.shadowBlur = 15;
+      drawRoundedRect(
+        trail.x - carWidth / 2,
+        trail.y,
+        carWidth * trail.scale,
+        carHeight * trail.scale,
+        8,
+        true,
+        false
+      );
+      ctx.restore();
+    });
   }
 
   // 繪製圓角矩形
@@ -277,6 +1096,78 @@
     ctx.arc(x, y, crownR, 0, Math.PI * 2);
     ctx.fill();
   }
+  
+  // 繪製路燈
+  function drawStreetLight(x, y) {
+    // 燈柱
+    ctx.fillStyle = '#616161';
+    ctx.fillRect(x - 2, y, 4, 40);
+    
+    // 燈頭
+    ctx.fillStyle = '#ffeb3b';
+    ctx.beginPath();
+    ctx.arc(x, y - 5, 8, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // 燈罩
+    ctx.fillStyle = '#757575';
+    ctx.beginPath();
+    ctx.arc(x, y - 5, 10, 0, Math.PI, true);
+    ctx.closePath();
+    ctx.fill();
+    
+    // 燈光效果
+    ctx.fillStyle = 'rgba(255, 235, 59, 0.3)';
+    ctx.beginPath();
+    ctx.moveTo(x - 15, y - 5);
+    ctx.lineTo(x + 15, y - 5);
+    ctx.lineTo(x, y + 25);
+    ctx.closePath();
+    ctx.fill();
+  }
+  
+  // 繪製交通標誌
+  function drawTrafficSign(x, y) {
+    // 標誌柱
+    ctx.fillStyle = '#78909c';
+    ctx.fillRect(x - 1, y, 2, 25);
+    
+    // 標誌牌
+    ctx.fillStyle = '#ff9800';
+    ctx.beginPath();
+    ctx.arc(x, y - 10, 12, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // 標誌文字
+    ctx.fillStyle = 'white';
+    ctx.font = 'bold 10px Arial';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('!', x, y - 10);
+  }
+  
+  // 繪製灌木叢
+  function drawBush(x, y) {
+    ctx.fillStyle = '#388e3c';
+    ctx.beginPath();
+    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.arc(x + 10, y - 5, 12, 0, Math.PI * 2);
+    ctx.arc(x - 10, y - 3, 13, 0, Math.PI * 2);
+    ctx.arc(x + 5, y + 8, 11, 0, Math.PI * 2);
+    ctx.arc(x - 8, y + 7, 10, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  
+  // 繪製雲朵
+  function drawCloud(x, y) {
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.beginPath();
+    ctx.arc(x, y, 10, 0, Math.PI * 2);
+    ctx.arc(x + 12, y - 5, 12, 0, Math.PI * 2);
+    ctx.arc(x + 25, y, 10, 0, Math.PI * 2);
+    ctx.arc(x + 10, y + 8, 8, 0, Math.PI * 2);
+    ctx.fill();
+  }
 
   // 繪製
   function draw() {
@@ -292,28 +1183,45 @@
         drawHouse(obj.x, obj.y, obj.width, obj.height);
       } else if (obj.type === 'tree') {
         drawTree(obj.x, obj.y, obj.trunkWidth, obj.trunkHeight, obj.crownRadius);
+      } else if (obj.type === 'streetLight') {
+        drawStreetLight(obj.x, obj.y);
+      } else if (obj.type === 'trafficSign') {
+        drawTrafficSign(obj.x, obj.y);
+      } else if (obj.type === 'bush') {
+        drawBush(obj.x, obj.y);
+      } else if (obj.type === 'cloud') {
+        drawCloud(obj.x, obj.y);
       }
     });
 
-    // 車道分隔線（只在道路內）
-    ctx.strokeStyle = 'rgba(200, 200, 255, 0.3)';
+    // 車道分隔線（只在道路內）- 動態效果
+    ctx.strokeStyle = 'rgba(200, 200, 255, 0.4)';
     ctx.lineWidth = 2;
-    ctx.setLineDash([12, 12]);
+    const dashLength = 15;
+    const gapLength = 10;
+    const dashOffset = frameCount % (dashLength + gapLength);
+    ctx.setLineDash([dashLength, gapLength]);
+    ctx.lineDashOffset = -dashOffset;
+    
     for (const x of laneDividers) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
       ctx.lineTo(x, canvas.height);
       ctx.stroke();
     }
+    
     ctx.setLineDash([]);
     ctx.lineWidth = 1;
 
+    // 繪製軌跡特效（在小車後面）
+    drawTrailEffects();
+
     // 玩家小車
-    ctx.fillStyle = '#4fc3f7';
-    ctx.shadowColor = '#4fc3f7';
+    ctx.fillStyle = carColor;
+    ctx.shadowColor = carColor;
     ctx.shadowBlur = 15;
     drawRoundedRect(
-      lanes[playerLane] - carWidth / 2,
+      carX - carWidth / 2,
       canvas.height - carHeight - 20,
       carWidth,
       carHeight,
@@ -326,7 +1234,7 @@
     // 小車車窗
     ctx.fillStyle = '#bbdefb';
     drawRoundedRect(
-      lanes[playerLane] - carWidth / 2 + 9,
+      carX - carWidth / 2 + 9,
       canvas.height - carHeight - 20 + 8,
       carWidth - 18,
       carHeight / 2 - 8,
@@ -335,21 +1243,99 @@
       false
     );
 
-    // 障礙物
+    // 障礙物 (美化版本)
     obstacles.forEach(obs => {
       obs.lanes.forEach(laneIndex => {
         const x = lanes[laneIndex] - carWidth / 2;
         const y = obs.y;
+        const type = obs.type || 0;
 
-        ctx.fillStyle = '#ff5252';
-        ctx.shadowColor = '#ff5252';
-        ctx.shadowBlur = 10;
-        drawRoundedRect(x, y, carWidth, carHeight, 6, true, false);
-        ctx.shadowBlur = 0;
+        // 根據障礙物類型繪製不同外觀
+        switch (type) {
+          case 0: // 紅色施工障礙物
+            ctx.fillStyle = '#ff5252';
+            ctx.shadowColor = '#ff5252';
+            ctx.shadowBlur = 10;
+            drawRoundedRect(x, y, carWidth, carHeight, 6, true, false);
+            ctx.shadowBlur = 0;
 
-        ctx.fillStyle = '#ffebee';
-        for (let i = 0; i < 3; i++) {
-          ctx.fillRect(x + 6, y + 10 + i * 16, carWidth - 12, 3);
+            // 白色條紋
+            ctx.fillStyle = '#ffebee';
+            for (let i = 0; i < 3; i++) {
+              ctx.fillRect(x + 6, y + 10 + i * 16, carWidth - 12, 3);
+            }
+
+            // 添加警告圖標
+            ctx.fillStyle = '#ffebee';
+            ctx.font = 'bold 14px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText('⚠', x + carWidth / 2, y + carHeight / 2 + 5);
+            break;
+
+          case 1: // 藍色警車
+            // 車身
+            ctx.fillStyle = '#2196f3';
+            ctx.shadowColor = '#2196f3';
+            ctx.shadowBlur = 8;
+            drawRoundedRect(x, y, carWidth, carHeight, 8, true, false);
+            ctx.shadowBlur = 0;
+
+            // 車窗
+            ctx.fillStyle = '#bbdefb';
+            drawRoundedRect(x + 8, y + 8, carWidth - 16, carHeight / 2 - 8, 4, true, false);
+
+            // 警燈 (閃爍效果)
+            const flash = Math.sin(Date.now() / 200) > 0;
+            if (flash) {
+              ctx.fillStyle = '#ff1744';
+              ctx.fillRect(x + 10, y + 5, carWidth - 20, 6);
+              ctx.fillStyle = '#1e88e5';
+              ctx.fillRect(x + 10, y + carHeight - 11, carWidth - 20, 6);
+            }
+            break;
+
+          case 2: // 黃色警告桶
+            // 桶身
+            ctx.fillStyle = '#ffeb3b';
+            ctx.shadowColor = '#ffeb3b';
+            ctx.shadowBlur = 8;
+            drawRoundedRect(x, y, carWidth, carHeight, 10, true, false);
+            ctx.shadowBlur = 0;
+
+            // 黑色條紋
+            ctx.fillStyle = '#212121';
+            ctx.fillRect(x + 4, y + 8, carWidth - 8, 4);
+            ctx.fillRect(x + 4, y + carHeight - 12, carWidth - 8, 4);
+
+            // 中間黑色條紋
+            ctx.fillRect(x + 4, y + carHeight / 2 - 2, carWidth - 8, 4);
+
+            // 反光效果
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            drawRoundedRect(x + 4, y + 4, carWidth / 3, 4, 2, true, false);
+            break;
+
+          case 3: // 綠色貨車
+            // 車身
+            ctx.fillStyle = '#4caf50';
+            ctx.shadowColor = '#4caf50';
+            ctx.shadowBlur = 8;
+            drawRoundedRect(x, y, carWidth, carHeight, 6, true, false);
+            ctx.shadowBlur = 0;
+
+            // 貨車車廂
+            ctx.fillStyle = '#388e3c';
+            drawRoundedRect(x + carWidth * 0.6, y, carWidth * 0.4, carHeight, 6, true, false);
+
+            // 車窗
+            ctx.fillStyle = '#bbdefb';
+            drawRoundedRect(x + 8, y + 8, carWidth * 0.5 - 12, carHeight / 2 - 8, 4, true, false);
+
+            // 車輪
+            ctx.fillStyle = '#212121';
+            ctx.fillRect(x + 8, y + carHeight - 6, 10, 6);
+            ctx.fillRect(x + carWidth - 18, y + carHeight - 6, 10, 6);
+            break;
         }
       });
     });
@@ -363,24 +1349,11 @@
       ctx.fill();
     });
     ctx.globalAlpha = 1;
+
+    // 繪製得分特效
+    drawScoreEffects();
   }
 
-  // 音效
-  function playSound(frequency, duration, type = 'sine') {
-    try {
-      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const oscillator = audioCtx.createOscillator();
-      const gainNode = audioCtx.createGain();
-      oscillator.connect(gainNode);
-      gainNode.connect(audioCtx.destination);
-      oscillator.frequency.value = frequency;
-      oscillator.type = type;
-      gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-      oscillator.start(audioCtx.currentTime);
-      oscillator.stop(audioCtx.currentTime + duration);
-    } catch (e) {}
-  }
 
   // 主循環
   function gameLoop() {
@@ -389,11 +1362,41 @@
     requestAnimationFrame(gameLoop);
   }
 
+  // 響應式畫布調整
+  function resizeCanvas() {
+    const container = canvas.parentElement;
+    const containerWidth = container.clientWidth;
+    const maxWidth = 400;
+    const maxHeight = 600;
+    
+    if (containerWidth < maxWidth) {
+      // 在小屏幕上縮小畫布
+      canvas.width = containerWidth - 20;
+      canvas.height = (containerWidth - 20) * (maxHeight / maxWidth);
+    } else {
+      // 在大屏幕上保持原始大小
+      canvas.width = maxWidth;
+      canvas.height = maxHeight;
+    }
+    
+    // 重新繪製遊戲
+    if (!gameOver) {
+      draw();
+    }
+  }
+
   // 重新開始
   function restartGame() {
+    // 播放按鈕點擊音效
+    playButtonSound();
+    
     obstacles = [];
     particles = [];
+    scoreEffects = [];
+    trailEffects = [];
     playerLane = 1;
+    carX = lanes[playerLane]; // 重置小車位置
+    lastCarX = lanes[playerLane]; // 重置軌跡追蹤
     speed = baseSpeed;
     frameCount = 0;
     score = 0;
@@ -401,7 +1404,116 @@
     restartBtn.style.display = 'none';
     scoreDisplay.textContent = '得分: 0';
     initScenery();
+    startSoundPlayed = false; // 重置標誌以便播放開始音效
+    playStartSound();
+    
+    // 開始遊戲統計
+    startGameStats();
   }
+
+  // 初始化響應式調整
+  window.addEventListener('resize', resizeCanvas);
+  window.addEventListener('load', resizeCanvas);
+  resizeCanvas();
+
+  // === 遊戲設置系統 ===
+  const settingsBtn = document.getElementById('settingsBtn');
+  const settingsPanel = document.getElementById('settingsPanel');
+  const soundToggle = document.getElementById('soundToggle');
+  const difficultySelect = document.getElementById('difficultySelect');
+  const carColorSelect = document.getElementById('carColorSelect');
+  const sensitivitySlider = document.getElementById('sensitivitySlider');
+  const sensitivityValue = document.getElementById('sensitivityValue');
+  
+  // 載入保存的設置
+  function loadSettings() {
+    const savedSound = localStorage.getItem('carGameSoundEnabled');
+    if (savedSound !== null) {
+      soundToggle.checked = savedSound === 'true';
+      soundEnabled = soundToggle.checked;
+    }
+    
+    const savedDifficulty = localStorage.getItem('carGameDifficulty');
+    if (savedDifficulty) {
+      difficultySelect.value = savedDifficulty;
+      applyDifficulty(savedDifficulty);
+    }
+    
+    const savedCarColor = localStorage.getItem('carGameCarColor');
+    if (savedCarColor) {
+      carColorSelect.value = savedCarColor;
+      carColor = savedCarColor; // 設置當前小車顏色
+    }
+    
+    const savedSensitivity = localStorage.getItem('carGameSensitivity');
+    if (savedSensitivity) {
+      sensitivitySlider.value = savedSensitivity;
+      sensitivityValue.textContent = savedSensitivity;
+    }
+  }
+  
+  // 應用難度設置
+  function applyDifficulty(difficulty) {
+    switch(difficulty) {
+      case 'easy':
+        baseSpeed = 2.5;
+        break;
+      case 'normal':
+        baseSpeed = 3;
+        break;
+      case 'hard':
+        baseSpeed = 3.5;
+        break;
+    }
+    speed = baseSpeed;
+  }
+  
+  // 切換設置面板顯示
+  function toggleSettings() {
+    if (settingsPanel.style.display === 'none') {
+      settingsPanel.style.display = 'block';
+      settingsBtn.textContent = '關閉設置';
+    } else {
+      settingsPanel.style.display = 'none';
+      settingsBtn.textContent = '遊戲設置';
+    }
+  }
+  
+  // 應用設置
+  function applySettings() {
+    // 音效設置
+    soundEnabled = soundToggle.checked;
+    localStorage.setItem('carGameSoundEnabled', soundEnabled);
+    
+    // 難度設置
+    const difficulty = difficultySelect.value;
+    localStorage.setItem('carGameDifficulty', difficulty);
+    applyDifficulty(difficulty);
+    
+    // 小車顏色設置
+    const newCarColor = carColorSelect.value;
+    localStorage.setItem('carGameCarColor', newCarColor);
+    carColor = newCarColor; // 更新當前小車顏色
+    
+    // 靈敏度設置
+    const sensitivity = sensitivitySlider.value;
+    localStorage.setItem('carGameSensitivity', sensitivity);
+    sensitivityValue.textContent = sensitivity;
+    
+    // 顯示確認訊息
+    alert('設置已套用！');
+    
+    // 關閉設置面板
+    toggleSettings();
+  }
+  
+  // 初始化設置
+  loadSettings();
+  
+  // 靈敏度滑塊事件
+  sensitivitySlider.addEventListener('input', () => {
+    sensitivityValue.textContent = sensitivitySlider.value;
+  });
 
   // 啟動遊戲
   gameLoop();

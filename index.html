@@ -1,63 +1,328 @@
 <!DOCTYPE html>
-<html lang="zh-HK">
+<html lang="zh-Hant">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的遊戲館</title>
-    <style>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Edna's Game Center</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ff6bb5",
+                        "primary-dark": "#e05ba0", 
+                        "primary-light": "#ffb3d9",
+                        "background-light": "#f8f5f7",
+                        "background-dark": "#1a1a2e",
+                        "surface-light": "#ffffff",
+                        "surface-dark": "#2d2d44",
+                        "text-muted": "#a8a8b3",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "Noto Sans TC", "sans-serif"],
+                        "body": ["Noto Sans TC", "sans-serif"],
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.5rem", 
+                        "lg": "1rem", 
+                        "xl": "1.5rem", 
+                        "2xl": "2rem",
+                        "full": "9999px"
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(255, 107, 181, 0.15)',
+                        'glow': '0 0 20px rgba(255, 107, 181, 0.3)',
+                        'neon': '0 0 10px rgba(255, 107, 181, 0.3), 0 0 20px rgba(255, 107, 181, 0.1)',
+                        'neon-hover': '0 0 15px rgba(255, 107, 181, 0.5), 0 0 30px rgba(255, 107, 181, 0.2)',
+                    }
+                },
+            },
+        }
+    </script>
+    <style type="text/tailwindcss">
         body {
-            font-family: Arial, sans-serif;
-            background: #1a1a2e;
-            color: white;
-            text-align: center;
-            padding: 40px;
+            font-family: 'Plus Jakarta Sans', 'Noto Sans TC', sans-serif;
         }
-        h1 { margin-bottom: 30px; }
-        .games {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
+        .pattern-bg {
+            background-image: radial-gradient(#ff6bb5 1px, transparent 1px);
+            background-size: 24px 24px;
+            opacity: 0.08;
         }
-        .game-card {
-            background: #2d2d44;
-            padding: 25px 35px;
-            border-radius: 10px;
-            text-decoration: none;
-            color: white;
-            transition: 0.3s;
-            display: inline-block; /* 可選：確保不會被拉伸 */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        .dark .pattern-bg {
+            opacity: 0.15;
         }
-        .game-card:hover {
-            background: #3d3d5c;
-            transform: scale(1.05);
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
-        .icon {
-            font-size: 2em;
-            margin-bottom: 10px;
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
     </style>
 </head>
-<body>
-    <h1>🎮 我的遊戲館</h1>
-    <div class="games">
-        <a href="game1.html" class="game-card">
-            <div class="icon">🎯</div>
-            <div>貪食蛇遊戲</div>
-        </a>
-        <a href="game2.html" class="game-card">
-            <div class="icon">✊</div>
-            <div>2048</div>
-        </a>
-        <a href="game3.html" class="game-card">
-            <div class="icon">✊</div>
-            <div>數獨</div>
-        </a>
-        <a href="game4.html" class="game-card">
-            <div class="icon">✊</div>
-            <div>小車躲避障礙物</div>
-        </a>
-    </div>
+<body class="bg-background-light dark:bg-background-dark text-gray-800 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+    <div class="fixed inset-0 pattern-bg pointer-events-none z-0"></div>
+    
+    <header class="sticky top-0 z-50 bg-surface-light/90 dark:bg-surface-dark/90 backdrop-blur-md border-b border-primary/10 dark:border-primary/20 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-2">
+                        <div class="w-10 h-10 bg-gradient-to-tr from-primary to-primary-light rounded-xl flex items-center justify-center text-white shadow-glow transform -rotate-3 hover:rotate-0 transition-transform duration-300">
+                            <span class="material-icons text-2xl">sports_esports</span>
+                        </div>
+                        <div class="flex flex-col">
+                            <h1 class="text-xl font-extrabold tracking-tight text-gray-900 dark:text-white leading-tight">
+                                Edna's <span class="text-primary">Game Center</span>
+                            </h1>
+                            <span class="text-xs font-medium text-primary/80 dark:text-primary-light font-body">玩得開心，笑得燦爛！</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4 md:gap-6">
+                    <nav class="hidden lg:flex gap-6 text-sm font-semibold">
+                        <a class="text-primary hover:text-primary-dark transition-colors" href="#">首頁</a>
+                        <a class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary-light transition-colors" href="#">排行榜</a>
+                        <a class="text-gray-500 hover:text-primary dark:text-gray-400 dark:hover:text-primary-light transition-colors" href="#">關於我們</a>
+                    </nav>
+                    <div class="flex items-center gap-3">
+                        <button class="relative inline-flex h-9 w-16 items-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background-dark" id="theme-toggle">
+                            <span class="sr-only">Toggle Dark Mode</span>
+                            <span class="translate-x-1 inline-block h-7 w-7 transform rounded-full bg-white shadow-md transition-transform duration-300 flex items-center justify-center" id="toggle-circle">
+                                <span class="material-icons text-yellow-500 text-sm opacity-100 dark:opacity-0 absolute transition-opacity">wb_sunny</span>
+                                <span class="material-icons text-primary text-sm opacity-0 dark:opacity-100 absolute transition-opacity">dark_mode</span>
+                            </span>
+                        </button>
+                        <button class="hidden sm:flex items-center gap-2 px-5 py-2 bg-white dark:bg-surface-dark border-2 border-primary text-primary hover:bg-primary hover:text-white font-bold rounded-full transition-all duration-300 text-sm">
+                            <span class="material-symbols-outlined text-[18px]">person</span>
+                            <span>登入</span>
+                        </button>
+                        <button class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                            <span class="material-icons">menu</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow">
+        <section class="relative overflow-hidden py-12 sm:py-20">
+            <div class="absolute inset-0 z-0 opacity-20 pointer-events-none">
+                <div class="absolute top-0 right-0 w-96 h-96 bg-primary rounded-full filter blur-[120px] translate-x-1/2 -translate-y-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-64 h-64 bg-purple-600 rounded-full filter blur-[100px] -translate-x-1/2 translate-y-1/2"></div>
+            </div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <span class="inline-block py-1 px-3 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-bold uppercase tracking-wider mb-4">
+                    每週新增遊戲
+                </span>
+                <h2 class="text-4xl sm:text-6xl font-extrabold tracking-tight mb-6">
+                    準備好 <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-400">升級了嗎？</span>
+                </h2>
+                <p class="text-lg sm:text-xl text-gray-600 dark:text-text-muted max-w-2xl mx-auto mb-10">
+                    潛入像素完美的樂趣世界。從復古經典到現代益智，你的下一個高分正在這裡等著你。
+                </p>
+                <div class="flex justify-center gap-4">
+                    <button onclick="loadGame('game1.html', '貪食蛇')" class="flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary-dark text-white font-bold rounded-xl shadow-neon hover:shadow-neon-hover transition-all transform hover:-translate-y-1">
+                        <span class="material-icons text-xl">play_arrow</span>
+                        開始遊戲
+                    </button>
+                    <button class="px-8 py-4 bg-white dark:bg-surface-dark text-gray-800 dark:text-white border border-gray-200 dark:border-white/10 font-bold rounded-xl hover:bg-gray-50 dark:hover:bg-white/5 transition-all">
+                        瀏覽所有遊戲
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 bg-gray-50/50 dark:bg-[#151525]/50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex justify-between items-end mb-10">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-2 text-gray-900 dark:text-white">精選遊戲</h3>
+                        <p class="text-gray-600 dark:text-text-muted">為您挑選的最佳遊戲。</p>
+                    </div>
+                    <a class="hidden sm:flex items-center text-primary font-bold hover:text-primary-dark transition-colors" href="#">
+                        查看全部 <span class="material-icons ml-1 text-sm">arrow_forward</span>
+                    </a>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- 貪食蛇 -->
+                    <div class="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-lg hover:shadow-neon-hover transition-all border border-gray-200 dark:border-white/5">
+                        <div class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <span class="material-icons text-green-600 dark:text-green-400 text-3xl">games</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-center mb-2">貪食蛇</h4>
+                        <p class="text-gray-600 dark:text-text-muted text-sm text-center mb-4">經典復古遊戲，吃掉像素變長！</p>
+                        <button onclick="loadGame('game1.html', '貪食蛇')" class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-xl font-bold transition-colors">
+                            開始遊戲
+                        </button>
+                    </div>
+                    
+                    <!-- 2048 -->
+                    <div class="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-lg hover:shadow-neon-hover transition-all border border-gray-200 dark:border-white/5">
+                        <div class="w-16 h-16 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <span class="material-icons text-yellow-600 dark:text-yellow-400 text-3xl">grid_4x4</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-center mb-2">2048</h4>
+                        <p class="text-gray-600 dark:text-text-muted text-sm text-center mb-4">合併數字達到2048！</p>
+                        <button onclick="loadGame('game2.html', '2048')" class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-xl font-bold transition-colors">
+                            開始遊戲
+                        </button>
+                    </div>
+                    
+                    <!-- 數獨 -->
+                    <div class="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-lg hover:shadow-neon-hover transition-all border border-gray-200 dark:border-white/5">
+                        <div class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <span class="material-icons text-blue-600 dark:text-blue-400 text-3xl">grid_on</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-center mb-2">數獨</h4>
+                        <p class="text-gray-600 dark:text-text-muted text-sm text-center mb-4">經典數字邏輯謎題</p>
+                        <button onclick="loadGame('game3.html', '數獨')" class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-xl font-bold transition-colors">
+                            開始遊戲
+                        </button>
+                    </div>
+                    
+                    <!-- 小車躲避障礙物 -->
+                    <div class="bg-white dark:bg-surface-dark rounded-2xl p-6 shadow-lg hover:shadow-neon-hover transition-all border border-gray-200 dark:border-white/5">
+                        <div class="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center mb-4 mx-auto">
+                            <span class="material-icons text-red-600 dark:text-red-400 text-3xl">directions_car</span>
+                        </div>
+                        <h4 class="text-xl font-bold text-center mb-2">小車躲避障礙物</h4>
+                        <p class="text-gray-600 dark:text-text-muted text-sm text-center mb-4">快節奏賽車躲避遊戲</p>
+                        <button onclick="loadGame('game4.html', '小車躲避障礙物')" class="w-full bg-primary hover:bg-primary-dark text-white py-3 rounded-xl font-bold transition-colors">
+                            開始遊戲
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                    <div class="p-6 bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-white/5">
+                        <div class="text-4xl font-extrabold text-primary mb-2">12k+</div>
+                        <div class="text-gray-600 dark:text-text-muted font-medium">活躍玩家</div>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-white/5">
+                        <div class="text-4xl font-extrabold text-primary mb-2">4.9</div>
+                        <div class="text-gray-600 dark:text-text-muted font-medium">平均評分</div>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-white/5">
+                        <div class="text-4xl font-extrabold text-primary mb-2">24/7</div>
+                        <div class="text-gray-600 dark:text-text-muted font-medium">全天候支援</div>
+                    </div>
+                    <div class="p-6 bg-white dark:bg-surface-dark rounded-2xl border border-gray-200 dark:border-white/5">
+                        <div class="text-4xl font-extrabold text-primary mb-2">100%</div>
+                        <div class="text-gray-600 dark:text-text-muted font-medium">滿意保證</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-white dark:bg-background-dark border-t border-gray-200 dark:border-white/5 py-12 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div class="col-span-1 md:col-span-2">
+                    <div class="flex items-center gap-2 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+                            <span class="material-icons text-white text-sm">sports_esports</span>
+                        </div>
+                        <h4 class="font-display font-bold text-lg text-gray-900 dark:text-white">Edna's Game Center</h4>
+                    </div>
+                    <p class="text-gray-600 dark:text-text-muted text-sm max-w-xs mb-6">
+                        網路上最可愛的休閒遊戲場所。用粉紅像素和滿滿的愛製作。
+                    </p>
+                    <div class="flex gap-4">
+                        <a class="w-10 h-10 rounded-full bg-gray-100 dark:bg-surface-dark flex items-center justify-center text-gray-600 dark:text-text-muted hover:bg-primary hover:text-white transition-all" href="#">
+                            <span class="material-icons text-lg">facebook</span>
+                        </a>
+                        <a class="w-10 h-10 rounded-full bg-gray-100 dark:bg-surface-dark flex items-center justify-center text-gray-600 dark:text-text-muted hover:bg-primary hover:text-white transition-all" href="#">
+                            <span class="material-icons text-lg">public</span>
+                        </a>
+                        <a class="w-10 h-10 rounded-full bg-gray-100 dark:bg-surface-dark flex items-center justify-center text-gray-600 dark:text-text-muted hover:bg-primary hover:text-white transition-all" href="#">
+                            <span class="material-icons text-lg">alternate_email</span>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h5 class="font-bold text-gray-900 dark:text-white mb-4">遊戲</h5>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-text-muted">
+                        <li><a class="hover:text-primary transition-colors" href="#">貪食蛇</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">2048</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">數獨</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">小車躲避障礙物</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h5 class="font-bold text-gray-900 dark:text-white mb-4">公司</h5>
+                    <ul class="space-y-2 text-sm text-gray-600 dark:text-text-muted">
+                        <li><a class="hover:text-primary transition-colors" href="#">關於 Edna</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">聯絡我們</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">隱私權政策</a></li>
+                        <li><a class="hover:text-primary transition-colors" href="#">服務條款</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-gray-200 dark:border-white/5 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-sm text-gray-600 dark:text-text-muted">© 2024 Edna's Game Center. All rights reserved.</p>
+                <p class="text-sm text-gray-600 dark:text-text-muted flex items-center gap-1">
+                    Made with <span class="material-icons text-primary text-sm">favorite</span> in Web City
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('theme-toggle');
+        const toggleCircle = document.getElementById('toggle-circle');
+        
+        // Check for saved theme or prefer-color-scheme
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const savedTheme = localStorage.getItem('theme');
+        
+        if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+            document.documentElement.classList.add('dark');
+            toggleCircle.style.transform = 'translateX(calc(4rem - 1.75rem - 0.25rem))';
+        } else {
+            document.documentElement.classList.remove('dark');
+            toggleCircle.style.transform = 'translateX(0.25rem)';
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            const isDark = document.documentElement.classList.toggle('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            
+            if (isDark) {
+                toggleCircle.style.transform = 'translateX(calc(4rem - 1.75rem - 0.25rem))';
+            } else {
+                toggleCircle.style.transform = 'translateX(0.25rem)';
+            }
+        });
+        
+        // Game loading function
+        function loadGame(gameFile, gameName) {
+            // Store game info in localStorage for loading screen
+            localStorage.setItem('nextGame', gameFile);
+            localStorage.setItem('nextGameName', gameName);
+            
+            // Redirect to loading screen
+            window.location.href = 'loading.html';
+        }
+        
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Any additional initialization can go here
+        });
+    </script>
 </body>
 </html>
