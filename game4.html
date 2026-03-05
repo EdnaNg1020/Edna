@@ -384,6 +384,7 @@
 
 <button id="restartBtn" onclick="restartGame()">重新開始</button>
 <button id="settingsBtn" onclick="toggleSettings()">遊戲設置</button>
+<button id="homeBtn" onclick="goToHome()">返回主頁</button>
 
 <div class="settings-panel" id="settingsPanel" style="display: none;">
   <h3>遊戲設置</h3>
@@ -433,6 +434,7 @@
   const restartBtn = document.getElementById('restartBtn');
   const leftBtn = document.getElementById('left-btn');
   const rightBtn = document.getElementById('right-btn');
+  const homeBtn = document.getElementById('homeBtn');
 
   // ✅ 調整車道：適配 400px 寬度，留出左右風景空間
   const lanes = [75, 200, 325]; // 左 中 右
@@ -443,6 +445,11 @@
   const carWidth = 45; // 稍微加大
   const carHeight = 60;
   const carAnimationSpeed = 0.2; // 動畫速度（0-1）
+
+  // === 返回主頁函數 ===
+  function goToHome() {
+    window.location.href = 'index.html';
+  }
 
   // === 路邊風景物件 ===
   const scenery = [];

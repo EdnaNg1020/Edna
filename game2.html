@@ -346,6 +346,10 @@
                 <i class="fas fa-question-circle"></i>
                 遊戲說明
             </button>
+            <button id="home-button">
+                <i class="fas fa-home"></i>
+                返回主頁
+            </button>
         </div>
         
         <div class="game-container">
@@ -437,6 +441,7 @@
             const newGameButton = document.getElementById('new-game');
             const undoButton = document.getElementById('undo-move');
             const howToPlayButton = document.getElementById('how-to-play');
+            const homeButton = document.getElementById('home-button');
             const gameMessage = document.getElementById('game-message');
             const messageText = document.getElementById('message-text');
             const tryAgainButton = document.getElementById('try-again');
@@ -781,6 +786,10 @@
 
             howToPlayButton.addEventListener('click', function() {
                 alert('2048遊戲規則：\n\n1. 使用方向鍵或WASD移動方塊\n2. 當兩個相同數字的方塊碰撞時，它們會合併成一個數字加倍的方塊\n3. 每次移動後，會在隨機空位上出現一個新方塊（90%機率是2，10%機率是4）\n4. 當你創建出一個2048方塊時獲勝\n5. 當沒有空位且無法合併時遊戲結束');
+            });
+
+            homeButton.addEventListener('click', function() {
+                window.location.href = 'index.html';
             });
 
             initGame();

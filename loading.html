@@ -117,10 +117,13 @@
         </div>
     </main>
     <script>
-        // 從 URL 參數獲取遊戲名稱
-        const urlParams = new URLSearchParams(window.location.search);
-        const gameName = urlParams.get('game') || '未知遊戲';
-        const gameFile = urlParams.get('file') || 'game1.html';
+        // 從 localStorage 獲取遊戲信息
+        const gameFile = localStorage.getItem('nextGame') || 'game1.html';
+        const gameName = localStorage.getItem('nextGameName') || '貪食蛇';
+        
+        // 清除 localStorage 中的遊戲信息（避免重複使用）
+        localStorage.removeItem('nextGame');
+        localStorage.removeItem('nextGameName');
         
         // 更新遊戲名稱顯示
         document.getElementById('game-name').textContent = `即將進入：${gameName}`;

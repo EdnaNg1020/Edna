@@ -361,6 +361,7 @@
                 <button id="get-hint" class="btn-warning">获取提示</button>
                 <button id="solve-puzzle" class="btn-primary">显示答案</button>
                 <button id="reset-game" class="btn-danger">重置游戏</button>
+                <button id="home-button" class="btn-info">返回主頁</button>
             </div>
         </div>
         
@@ -412,6 +413,7 @@
             const getHintButton = document.getElementById('get-hint');
             const solvePuzzleButton = document.getElementById('solve-puzzle');
             const resetGameButton = document.getElementById('reset-game');
+            const homeButton = document.getElementById('home-button');
             
             // 初始化游戏
             function initGame() {
@@ -992,6 +994,9 @@
             getHintButton.addEventListener('click', getHint);
             solvePuzzleButton.addEventListener('click', solvePuzzle);
             resetGameButton.addEventListener('click', resetGame);
+            homeButton.addEventListener('click', function() {
+                window.location.href = 'index.html';
+            });
             
             difficultySelector.addEventListener('change', function() {
                 if (gameActive) {
